@@ -750,5 +750,6 @@
   "costs_cny_estimate": {
     "dsh-memory-keeper": "约 4.0",
     "scope": "只计 714 题作答（模型调用）；检索在本地跑、零成本；判分由外部用 grade.py 完成，未计入"
-  }
+  },
+  "note": "本汇总为仿榜单格式整理，非 grade.py summarize() 直出；分数为提交方按 judge-prompt.md 自检的结果，不是维护方独立判分。"
 }

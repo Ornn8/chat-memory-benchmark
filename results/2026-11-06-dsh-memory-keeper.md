@@ -53,4 +53,4 @@
 
 [汇总数据与来源哈希](2026-11-06-dsh-memory-keeper-summary.json) · [答卷](2026-11-06-dsh-memory-keeper-answers.jsonl)
 
-判分使用仓库的 `grading/grade.py`（`prepare` → `reviews` → `score`），逐题按 `judge-prompt.md` 判定，整题通过即 `pass`。
+**分数为提交方自检**：逐题 `reviews` 由提交方按 `judge-prompt.md` 判定，`grade.py` 只负责校验与汇总；**不是维护方独立判分**，是否入表与正式成绩以维护方复判为准。
