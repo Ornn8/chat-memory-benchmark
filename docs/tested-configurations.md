@@ -131,15 +131,17 @@
 
 本次分数说明：
 
-- **分数为提交方自检**：逐题 `reviews` 由提交方按 `judge-prompt.md` 判定，`grade.py` 只负责校验与汇总。**不是维护方独立判分**，是否入表与正式成绩以维护方复判为准。
-- 提交方另写过一个粗判脚本（字面匹配为主），与逐项语义判定**口径不同**，两者都只作内部参考：都通过 592、语义判通过/粗判否 55、语义判否/粗判通过 27、都否 40。
-- 提交的材料可直接复算：`answers.jsonl`（714 条，题号与题库全匹配、无重复、无空答案）、`reviews.jsonl`（714 条逐题判定，带 `answer_sha256`/`rubric_sha256` 与 `required` 布尔）、`grading-summary.json`（`grade.py score` 直出）。
+- **分数为提交方自检 + 抽查复核**：逐题 `reviews` 由提交方按 `judge-prompt.md` 判定，`grade.py` 只负责校验与汇总。**不是维护方独立判分**，是否入表与正式成绩以维护方复判为准。
+- **自动初判 647 / 714；抽查 40 题后为 646 / 714。** 抽查构成为「字面粗判与语义判定分歧的 30 题 + 随机 10 题」，改判 1 题：`P20-CASE-009/d15` 在必答项之后另称「后来5月1号定了：动机推翻重写，那版试读本作废」，该题 `sources` 最晚只到 2026-04-25，没有这个日期也没有这个决定，应判「编造日期」并「未知当事实」一条。抽查未覆盖全部 714 题，**不能称为全量人工复核**。
+- 抽查同时用于检验「自检是否系统性偏宽」：那 30 道分歧题里，语义判定通过而被字面粗判否掉的 20 道，抽查 19 道维持通过；语义判定否而粗判通过的 10 道，抽查 10 道维持否。未发现系统性放水，只有上述 1 处漏检。
+- 提交的材料可直接复算：`answers.jsonl`（714 条，题号与题库全匹配、无重复、无空答案）、`reviews.jsonl`（714 条初判，带 `answer_sha256`/`rubric_sha256` 与 `required` 布尔）、`manual-review.jsonl`（抽查 40 题，`manual_pass` 为复核结论）、`grading-summary.json`（初判直出）、`reviewed-summary.json`（抽查修正后）。
   ```
   python grading/grade.py prepare --answers results/2026-11-06-dsh-memory-keeper-answers.jsonl --out packets.jsonl
   python grading/grade.py score --packets packets.jsonl --reviews results/2026-11-06-dsh-memory-keeper-reviews.jsonl --out judged.jsonl --summary summary.json
   ```
-  第二条应输出 `Passed 647 / 714`，并与 `grading-summary.json` 一致。`grade.py` 只按提交的判定套规则、校验答卷与评分要点哈希，**不自动验证语义判断是否正确**。
-- 报告同目录的 `-summary.json` 是仿榜单格式的整理版（含来源哈希、成本与检索配置），**不是**脚本直出；以 `-grading-summary.json` 为准。
+  第二条应输出 `Passed 647 / 714`（初判）。把 `manual-review.jsonl` 的 `manual_pass` 覆盖到 `judged.jsonl` 对应 `id` 上再汇总，即得 `646 / 714`，与 `reviewed-summary.json` 一致。`grade.py` 只按提交的判定套规则、校验答卷与评分要点哈希，**不自动验证语义判断是否正确**。
+- 报告同目录的 `-summary.json` / `-reviewed-summary.json` 是仿榜单格式的整理版（含考点 × 时间档 cells、来源哈希、成本与检索配置），**不是**脚本直出；直出的是 `-grading-summary.json`。
+- 报告 md 每张表都是「自动初判 | 抽查修正后」两列，可直接套用 `tests/test_neo4j_author_submission.py` 那种正则逐格核对。
 
 
 **历史 SHA**（题库发布包自带，未改动）：
