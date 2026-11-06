@@ -51,6 +51,8 @@
 | 改口 | 36 / 40 |
 | 相似事件 | 40 / 40 |
 
-[汇总数据与来源哈希](2026-11-06-dsh-memory-keeper-summary.json) · [答卷](2026-11-06-dsh-memory-keeper-answers.jsonl)
+[答卷](2026-11-06-dsh-memory-keeper-answers.jsonl) · [逐题判定](2026-11-06-dsh-memory-keeper-reviews.jsonl) · [`grade.py` 直出汇总](2026-11-06-dsh-memory-keeper-grading-summary.json) · [榜单格式整理版](2026-11-06-dsh-memory-keeper-summary.json)
+
+答卷、逐题判定与直出汇总三者同源：按 [`grading/README.md`](../grading/README.md) 跑 `prepare` + `score` 可复算到 **647 / 714**。`-summary.json` 是仿榜单格式的整理版（带来源哈希、成本与检索配置），不是 `summarize()` 直出；数字以 `-grading-summary.json` 为准。
 
 **分数为提交方自检**：逐题 `reviews` 由提交方按 `judge-prompt.md` 判定，`grade.py` 只负责校验与汇总；**不是维护方独立判分**，是否入表与正式成绩以维护方复判为准。

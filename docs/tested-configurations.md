@@ -133,7 +133,13 @@
 
 - **分数为提交方自检**：逐题 `reviews` 由提交方按 `judge-prompt.md` 判定，`grade.py` 只负责校验与汇总。**不是维护方独立判分**，是否入表与正式成绩以维护方复判为准。
 - 提交方另写过一个粗判脚本（字面匹配为主），与逐项语义判定**口径不同**，两者都只作内部参考：都通过 592、语义判通过/粗判否 55、语义判否/粗判通过 27、都否 40。
-- 提交的训练材料只有 `answers.jsonl`（714 条，题号与题库全匹配、无重复、无空答案），可直接 `python grading/grade.py prepare --answers answers-714.jsonl --out packets.jsonl`。
+- 提交的材料可直接复算：`answers.jsonl`（714 条，题号与题库全匹配、无重复、无空答案）、`reviews.jsonl`（714 条逐题判定，带 `answer_sha256`/`rubric_sha256` 与 `required` 布尔）、`grading-summary.json`（`grade.py score` 直出）。
+  ```
+  python grading/grade.py prepare --answers results/2026-11-06-dsh-memory-keeper-answers.jsonl --out packets.jsonl
+  python grading/grade.py score --packets packets.jsonl --reviews results/2026-11-06-dsh-memory-keeper-reviews.jsonl --out judged.jsonl --summary summary.json
+  ```
+  第二条应输出 `Passed 647 / 714`，并与 `grading-summary.json` 一致。`grade.py` 只按提交的判定套规则、校验答卷与评分要点哈希，**不自动验证语义判断是否正确**。
+- 报告同目录的 `-summary.json` 是仿榜单格式的整理版（含来源哈希、成本与检索配置），**不是**脚本直出；以 `-grading-summary.json` 为准。
 
 
 **历史 SHA**（题库发布包自带，未改动）：
