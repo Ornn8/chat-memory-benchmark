@@ -135,3 +135,18 @@
 - 因此自测数 **619 / 714** 只作内部自检参考，**不作为正式成绩**，也不与榜单其他条目直接比较；正式成绩以作者用 `grade.py` 复测为准。
 - 提交的训练材料只有 `answers.jsonl`（714 条，题号与题库全匹配、无重复、无空答案），可直接 `python grading/grade.py prepare --answers answers-714.jsonl --out packets.jsonl`。
 
+
+**历史 SHA**（题库发布包自带，未改动）：
+
+| 人物 | 文件 | SHA-256 |
+|---|---|---|
+| P01 | `histories/P01.jsonl` | `5073b1f9…53f198` |
+| P12 | `histories/P12.jsonl` | `9d762423…528223` |
+| P14 | `histories/P14.jsonl` | `030dcaf5…aeced` |
+| P16 | `histories/P16.jsonl` | `3b51c824…632eb5` |
+| P17 | `histories/P17.jsonl` | `a8b5b1f7…7851d` |
+| P20 | `histories/P20.jsonl` | `847ac8c7…21dc4f` |
+
+**是否中断**：无中断，714 题全部作答（0 缺、0 空、0 重复）。
+
+**实际读取的记忆状态**：每题独立检索，题库历史在导入阶段一次性写入 md，考试阶段不写回；每题可见范围由 `beforeDate` 限制在该题的 `now`，未过期的块不参与。
