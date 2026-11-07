@@ -9,6 +9,7 @@
 | digital-life-core | 温水 / mashangshui | [mashangshui/digital-life-core](https://github.com/mashangshui/digital-life-core) · [`d984665`](https://github.com/mashangshui/digital-life-core/tree/d984665ff2e452cf9f57d845cfb93bfb9a64b6b1) |
 | dsh-soul | 糖霜Official | [icyaaaww/dsh-soul](https://github.com/icyaaaww/dsh-soul) · [`8a95301`](https://github.com/icyaaaww/dsh-soul/tree/8a953010bdc97b54cb6be2e9b3793ec7a81317a6) |
 | SurfCore | 玛露Marrow | [Mieksido/surfcore](https://github.com/Mieksido/surfcore) · [`59ec306`](https://github.com/Mieksido/surfcore/tree/59ec3066f7d42a0452fae01f170c9a8484d5dbe5) |
+| SurfCore BGE-M3 向量重测 | 玛露Marrow | [Mieksido/surfcore](https://github.com/Mieksido/surfcore) · [`0ce8580`](https://github.com/Mieksido/surfcore/tree/0ce8580048d3dddb21860114edb8b115d5d79d1e)（0.8.9） |
 | dsh-rofm | 鄙人乃路人甲 | [wall1234567/dsh-rofm](https://github.com/wall1234567/dsh-rofm) · [`a51ed67`](https://github.com/wall1234567/dsh-rofm/tree/a51ed67607a40ea6d88b38f5ac12b9792eae681a) |
 | dsh-rofm 1.4.2（重测） | 鄙人乃路人甲 | [wall1234567/dsh-rofm](https://github.com/wall1234567/dsh-rofm) · [`ef3e20e`](https://github.com/wall1234567/dsh-rofm/tree/ef3e20e30582b59bddb9308c629793b44bfc567f) |
 | OpenViking 0.5.2.1 | 火山引擎 | [volcengine/OpenViking](https://github.com/volcengine/OpenViking) · [`f5e6203`](https://github.com/volcengine/OpenViking/tree/f5e6203033a13469c3d9a937f2ca39492ea69c51) |
@@ -116,3 +117,48 @@
 ## 早期还跑过的诊断对照
 
 旧卷中还试跑过无记忆、最近 20 轮、全量上下文、朴素向量检索，以及“一律含糊”“全倒出来”两种检验判分是否有效的反例。这些不是新增社区项目；旧卷评分、样本覆盖与当前新卷不同，不并入当前成绩表，也不把全量上下文当作长期记忆机制的成绩。
+
+## SurfCore BGE-M3 向量记忆（同上游重测）
+
+上游：[Mieksido/surfcore](https://github.com/Mieksido/surfcore) · [`0ce8580`](https://github.com/Mieksido/surfcore/tree/0ce8580048d3dddb21860114edb8b115d5d79d1e)（0.8.9）
+
+**接入性质：使用原生向量记忆模块，但不是真实 QQ bridge 会话。** 隔离 harness 直接调用 `src/vector-memory.js`，没有改动线上配置，也没有真实平台连接。
+
+接入流程：
+
+1. 六个人物的历史按轮调用 `recordsFromInboxLines` + `mergeVectorRecords` 写入本地 BGE-M3 索引；用户 `isOwner=true`、助手 `isSelf=true`、同一私聊 `conversationKey`，助手事件 +1 秒。
+2. 每个 cutoff 生成当时可见的前缀快照，按 `createdAt <= cutoff + 1s` 且 `recordTurn <= cutoff` 过滤。
+3. 每题用当前问题作为 query 调 `rankVectorMemories`（topK = 4、minScore = 0.4），再用 `renderVectorRecallBlock` 注入最多 600 字符。
+4. 作答输入 = 向量召回块 + 最近 5 个完整回合 + 当前逻辑时间 + 当前问题；不含完整历史、答案、rubric、evidence。
+5. 每题独立会话，考试不写回。
+
+与原生系统的差异（写清楚，便于按同一把尺子解读）：
+
+- **没有真实 QQ 连接、语音、图片、文件、手机端体验**；这些题按“检索不到”处理。
+- 使用隔离 harness 直接调用原生向量模块，不是线上 bridge 的一份运行实例。
+- 嵌入是本地 BGE-M3（Ollama 0.40.15、RTX 4060 Laptop、1024 维、`bge-m3@1024-f16-v1`），不是远程 embedding。
+- 与 2026-11-01 的 SurfCore 记忆卡记录（123 / 714）不是同一配置：那条是记忆卡 + 真实 QQ 文字传输，本条是向量检索路径，分数不能直接当作升级收益。
+
+本次分数说明：
+
+- **605 / 714**。逐题 `reviews` 由提交方按 `judge-prompt.md` 让 DeepSeek 判定，`grade.py` 只负责校验与汇总；**不是维护方独立判分**，是否入表与正式成绩以维护方复判为准。
+- 没有人工抽查修正；只提交一个判分口径。
+- 自动校验：714 条答案与 714 条判定题号全匹配、无重复、无空答案；未来记录泄漏 0；prompt 中 rubric / answer_sha256 / evidence / fact_id 标记 0；工具调用 0。
+- 答卷与判定可直接复算：`prepare` + `score` 应输出 `Passed 605 / 714`。报告同目录的 `-summary.json` 是仿榜单格式整理（含考点 × 时间档 cells、来源哈希、检索与成本），`-grading-summary.json` 是 `grade.py` 直出。
+
+**历史 SHA**（题库发布包自带，未改动）：
+
+| 人物 | 文件 | SHA-256 |
+|---|---|---|
+| P01 | `histories/P01.jsonl` | `5073b1f9…53f198` |
+| P12 | `histories/P12.jsonl` | `9d762423…528223` |
+| P14 | `histories/P14.jsonl` | `030dcaf5…3aeced` |
+| P16 | `histories/P16.jsonl` | `3b51c824…5632e5` |
+| P17 | `histories/P17.jsonl` | `a8b5b1f7…f7851d` |
+| P20 | `histories/P20.jsonl` | `847ac8c7…21dc4f` |
+
+**是否中断**：无中断，714 题全部作答（0 缺、0 空、0 重复）。
+
+**实际读取的记忆状态**：每题使用该 cutoff 的向量索引前缀快照；历史逐轮写入，考试阶段不写回。可见范围由快照的 `createdAt` 与 `recordTurn` 双重过滤控制。本地嵌入服务与索引均为隔离副本，未改动线上 SurfCore 配置。
+
+**费用**：按 DeepSeek 官方价逐调用估算，作答约 ¥1.70、判分约 ¥2.60，合计约 ¥4.30；本地 BGE-M3 嵌入无远程 API 费用，失败重试为 0 token。

@@ -37,7 +37,7 @@ Codex 会根据项目的接入方式完成测试，并使用本仓库的判分�
 | [SeekMemory](https://github.com/NeverENG/SeekMemory) | BangBang在coding / NeverENG | 原版插件，开启 Dream；完整卷 [230 / 714](results/2026-11-01-first-four.md) |
 | [digital-life-core](https://github.com/mashangshui/digital-life-core) | 温水 / mashangshui | 原生核心与迁移入口；完整卷 [233 / 714](results/2026-11-01-first-four.md) |
 | [dsh-soul](https://github.com/icyaaaww/dsh-soul) | 糖霜Official | 完整卷 418 / 714；合辑共同题 [402 / 687](results/2026-11-01.md) |
-| [SurfCore](https://github.com/Mieksido/surfcore) | 玛露Marrow | 完整卷 123 / 714；合辑共同题 [122 / 687](results/2026-11-01.md) |
+| [SurfCore](https://github.com/Mieksido/surfcore) | 玛露Marrow | 记忆卡完整卷 [123 / 714](results/2026-11-01.md)；向量记忆（BGE-M3）作者自测 [605 / 714](results/2026-11-07-surfcore-bge-m3-vector.md) |
 | [dsh-rofm](https://github.com/wall1234567/dsh-rofm) | 鄙人乃路人甲 | 1.4.2 重测初判 [471 / 714](results/2026-11-04.md)；旧版测试中断，保留 [242 / 687](results/2026-11-01.md) |
 | [OpenViking](https://github.com/volcengine/OpenViking) | 火山引擎 | 0.5.2.1 初判 [555 / 714](results/2026-11-04.md) |
 | [dsh-suzu-memory](https://github.com/eryucheng/dsh-suzu-memory) | eryucheng | 强制原生检索重测初判 [621 / 714](results/2026-11-05-suzu-forced.md)；自主决定是否检索的上一轮 [516 / 714](results/2026-11-04.md) |
