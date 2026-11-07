@@ -111,7 +111,7 @@
 
 ## dsh-memory-keeper
 
-上游：[flywalker68/dsh-memory-keeper](https://github.com/flywalker68/dsh-memory-keeper) · [`008d5a0`](https://github.com/flywalker68/dsh-memory-keeper/tree/008d5a08772e6a03e19dd299044dc125dcbb477d)
+上游：[flywalker68/dsh-memory-keeper](https://github.com/flywalker68/dsh-memory-keeper) · [`008d5a0`](https://github.com/flywalker68/dsh-memory-keeper/tree/008d5a08772e6a03e19dd299044dc125dcbb477d)（测试版本；之后插件有六处改动，见[实验记录](../results/2026-11-06-dsh-memory-keeper.md)末节，复测请用当前版本 `c1075fc`）
 
 **接入性质：只有检索，不是原生聊天宿主。** 按接入说明中「如果系统只提供记忆检索而不是完整聊天宿主，应记录其输出如何交给统一作答模型」这一条记录。
 
