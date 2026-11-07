@@ -112,3 +112,53 @@
 ## 早期还跑过的诊断对照
 
 旧卷中还试跑过无记忆、最近 20 轮、全量上下文、朴素向量检索，以及“一律含糊”“全倒出来”两种检验判分是否有效的反例。这些不是新增社区项目；旧卷评分、样本覆盖与当前新卷不同，不并入当前成绩表，也不把全量上下文当作长期记忆机制的成绩。
+
+## dsh-memory-keeper
+
+上游：[flywalker68/dsh-memory-keeper](https://github.com/flywalker68/dsh-memory-keeper) · [`008d5a0`](https://github.com/flywalker68/dsh-memory-keeper/tree/008d5a08772e6a03e19dd299044dc125dcbb477d)（测试版本；之后插件有六处改动，见[实验记录](../results/2026-11-06-dsh-memory-keeper.md)末节，复测请用当前版本 `c1075fc`）
+
+**接入性质：只有检索，不是原生聊天宿主。** 按接入说明中「如果系统只提供记忆检索而不是完整聊天宿主，应记录其输出如何交给统一作答模型」这一条记录。
+
+接入流程：
+
+1. 六个历史 jsonl 用仓库自带的 `node scripts/import-history.mjs ./histories ./memory` 一次性导入成 md 记忆库——每轮一行，格式为 `- **YYYY-MM-DD** · [第N轮] 用户消息（回：助手回复）`，日期写在块首供时间检索识别。
+2. 每题在截止日期**之前**的范围内检索：`memory_search(query, top=5, beforeDate=该题的 now)`。`beforeDate` 同时作用于词面与向量两条路径（`eligibleChunks` 唯一实现），未过期的块不参与。
+3. 检索为**词面 bigram（IDF 加权）+ 向量（`Xenova/bge-small-zh-v1.5`，512 维，int8）+ RRF 融合**，两路各取候选后合并，输出 top 5。
+4. 检索到的 5 段交给统一 DeepSeek 作答模型；**不再额外补最近六轮**——历史本身已全部在记忆库里，可见范围由 `beforeDate` 控制。
+5. 考题与回答**不写回**记忆库；每题独立检索，不共享状态。
+
+与原生系统的差异（写清楚，便于按同一把尺子解读）：
+
+- **没有逐轮回放与自主维护**：不做增量提取、摘要、改写、遗忘曲线，也不在考试节点触发维护。本质是「既有历史归档 + 检索」。
+- **没有短期窗口**：不提供最近六轮，所有历史进同一记忆库，靠日期边界控制可见性。这与 Qwen RAG 对照的形态接近，不是 Suzu / OpenViking 那种原生流程。
+- 没有图片、语音、文件、转述这类多模态处理；本次题库里的多模态题按「检索不到」处理。
+
+本次分数说明：
+
+- **分数为提交方自检 + 抽查复核**：逐题 `reviews` 由提交方按 `judge-prompt.md` 判定，`grade.py` 只负责校验与汇总。**不是维护方独立判分**，是否入表与正式成绩以维护方复判为准。
+- **自动初判 647 / 714；抽查 40 题后为 646 / 714。** 抽查构成为「字面粗判与语义判定分歧的 30 题 + 随机 10 题」，改判 1 题：`P20-CASE-009/d15` 在必答项之后另称「后来5月1号定了：动机推翻重写，那版试读本作废」，该题 `sources` 最晚只到 2026-04-25，没有这个日期也没有这个决定，应判「编造日期」并「未知当事实」一条。抽查未覆盖全部 714 题，**不能称为全量人工复核**。
+- 抽查同时用于检验「自检是否系统性偏宽」：那 30 道分歧题里，语义判定通过而被字面粗判否掉的 20 道，抽查 19 道维持通过；语义判定否而粗判通过的 10 道，抽查 10 道维持否。未发现系统性放水，只有上述 1 处漏检。
+- 提交的材料可直接复算：`answers.jsonl`（714 条，题号与题库全匹配、无重复、无空答案）、`reviews.jsonl`（714 条初判，带 `answer_sha256`/`rubric_sha256` 与 `required` 布尔）、`manual-review.jsonl`（抽查 40 题，`manual_pass` 为复核结论）、`grading-summary.json`（初判直出）、`reviewed-summary.json`（抽查修正后）。
+  ```
+  python grading/grade.py prepare --answers results/2026-11-06-dsh-memory-keeper-answers.jsonl --out packets.jsonl
+  python grading/grade.py score --packets packets.jsonl --reviews results/2026-11-06-dsh-memory-keeper-reviews.jsonl --out judged.jsonl --summary summary.json
+  ```
+  第二条应输出 `Passed 647 / 714`（初判）。把 `manual-review.jsonl` 的 `manual_pass` 覆盖到 `judged.jsonl` 对应 `id` 上再汇总，即得 `646 / 714`，与 `reviewed-summary.json` 一致。`grade.py` 只按提交的判定套规则、校验答卷与评分要点哈希，**不自动验证语义判断是否正确**。
+- 报告同目录的 `-summary.json` / `-reviewed-summary.json` 是仿榜单格式的整理版（含考点 × 时间档 cells、来源哈希、成本与检索配置），**不是**脚本直出；直出的是 `-grading-summary.json`。
+- 报告 md 每张表都是「自动初判 | 抽查修正后」两列，可直接套用 `tests/test_neo4j_author_submission.py` 那种正则逐格核对。
+
+
+**历史 SHA**（题库发布包自带，未改动）：
+
+| 人物 | 文件 | SHA-256 |
+|---|---|---|
+| P01 | `histories/P01.jsonl` | `5073b1f9…53f198` |
+| P12 | `histories/P12.jsonl` | `9d762423…528223` |
+| P14 | `histories/P14.jsonl` | `030dcaf5…aeced` |
+| P16 | `histories/P16.jsonl` | `3b51c824…632eb5` |
+| P17 | `histories/P17.jsonl` | `a8b5b1f7…7851d` |
+| P20 | `histories/P20.jsonl` | `847ac8c7…21dc4f` |
+
+**是否中断**：无中断，714 题全部作答（0 缺、0 空、0 重复）。
+
+**实际读取的记忆状态**：每题独立检索，题库历史在导入阶段一次性写入 md，考试阶段不写回；每题可见范围由 `beforeDate` 限制在该题的 `now`，未过期的块不参与。
