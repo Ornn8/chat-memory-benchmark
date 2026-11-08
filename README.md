@@ -45,6 +45,7 @@ Codex 会根据项目的接入方式完成测试，并使用本仓库的判分�
 | dsh-biocore 0.4.0 | 未标注 | **不可用**：测试历时约 34 小时，仅完成 58 / 714 题后停止；[查看记录](results/2026-11-07-recap.md) |
 | [dsh-neo4j-memory](https://github.com/shuunO-O/dsh-neo4j-memory) | shuunO-O | 作者自测；DeepSeek 初判及部分抽查后 [684 / 714](results/2026-11-05-dsh-neo4j.md)，判分者与其他项目不同 |
 | [dsh-memu-memory](https://github.com/Tkingxiao/dsh-memu-memory) | Tkingxiao | 作者自测；1.2.7 初判 [653 / 714](results/2026-11-06-dsh-memu-memory.md)，判分者与其他项目不同 |
+| [dsh-plugin-memory-graph（大肥鱼好记性）](https://github.com/YeStarOne/dsh-plugin-memory-graph) | YeStarOne | 作者侧自测、glm-5.3-flash 单票自判 [502 / 714](results/submissions/dsh-plugin-memory-graph-2026-11-07/README.md) |
 | Qwen RAG（本评测搭建的检索对照） | Qwen 模型团队；检索流程由本评测搭建 | 完整卷 [596 / 714](results/2026-11-01-first-four.md)；合辑共同题 [574 / 687](results/2026-11-01.md) |
 
 各项目的固定版本、实际接入方式、维护开关和局限统一放在[测试配置与局限](docs/tested-configurations.md)。作者署名沿用评测登记信息。
