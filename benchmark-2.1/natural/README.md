@@ -36,7 +36,7 @@
 
 ## 判分
 
-见 [../SCORING.md](../SCORING.md) 最后一节。判分员是 DeepSeek flash（与另两个榜相同），对比式标准 `{what, not_for, examples}`；回忆检测、口吻（0/1/2）和对「其他回忆」的历史核查是三次独立调用，提示词在 `../harness/bench21/prompts/natural_*.md`。出题人写的参考回复用同一判分员打分作为天花板检查（见 `results/`）。
+见 [../SCORING.md](../SCORING.md) 最后一节：A 是想起侧 R（X、H）与克制侧 P（Y、N0、Z）的调和平均，所以「从不提」和「见缝就提」都拿不到高分；编造按「标出可疑处 + 复核」两步认定，对所有系统一视同仁。判分员是 DeepSeek flash（与另两个榜相同），对比式标准 `{what, not_for, examples}`；回忆检测、口吻（0/1/2）和对「其他回忆」的历史核查是三次独立调用，提示词在 `../harness/bench21/prompts/natural_*.md`。出题人写的参考回复用同一判分员打分作为天花板检查（见 `results/`）。
 
 ## 怎么跑
 

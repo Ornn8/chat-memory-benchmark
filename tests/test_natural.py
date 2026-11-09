@@ -69,6 +69,27 @@ class AggregateTests(unittest.TestCase):
         self.assertAlmostEqual(agg['by_class']['X'], 100 * 2 / 3, places=1)
 
 
+class HarmonicTests(unittest.TestCase):
+    def _agg(self, x_score, y_score):
+        probes = [{'id': 'x'}, {'id': 'y'}]
+        k = {'x': key('X', 'X1'), 'y': key('Y', 'Y3')}
+        js = [{'id': 'x', 'k': 0, 'score': x_score, 'judge': {'responsive': True, 'target_recalled': x_score > 0}},
+              {'id': 'y', 'k': 0, 'score': y_score, 'judge': {'responsive': True, 'forbidden_recalled': y_score == 0}}]
+        return natural.aggregate(probes, k, js)[0]
+
+    def test_a_is_harmonic_mean_of_recall_and_restraint_sides(self):
+        a = self._agg(0.5, 1.0)
+        self.assertAlmostEqual(a['R_side'], 50.0)
+        self.assertAlmostEqual(a['P_side'], 100.0)
+        self.assertAlmostEqual(a['A_nat'], 2 * 50 * 100 / (50 + 100))
+
+    def test_extremes_score_low(self):
+        self.assertAlmostEqual(self._agg(1.0, 1.0)['A_nat'], 100.0)
+        self.assertAlmostEqual(self._agg(0.0, 1.0)['A_nat'], 0.0)       # never recall
+        self.assertAlmostEqual(self._agg(1.0, 0.0)['A_nat'], 0.0)       # recall at every chance
+        self.assertLess(self._agg(0.2, 1.0)['A_nat'], self._agg(0.6, 0.9)['A_nat'])
+
+
 class RewindTests(unittest.TestCase):
     def test_bm25_truncate(self):
         bm = IncBM25()

@@ -35,6 +35,9 @@ SCORING_VERSION = "natural-score-v1"
 CHAT_NOTE = "（这是日常聊天，像平时一样回复，通常一到四句。）"
 CLASS_NAME = {"X": "该提的时候要提", "H": "只记得一部分/没说过，要说拿不准", "Y": "不该提的时候不要提", "Z": "提不提都行", "N0": "无关闲聊，不该硬塞旧事"}
 CLASS_WEIGHT = {"X": 0.40, "H": 0.10, "Y": 0.30, "Z": 0.10, "N0": 0.10}
+# A = harmonic mean of the recall side R (X, H) and the restraint side P (Y, N0, Z); each side is the weighted mean of its classes' item scores.
+RECALL_SIDE = ("X", "H")
+RESTRAINT_SIDE = ("Y", "N0", "Z")
 OVER_SEVERITY = {"Y1": 1.0, "Y3": 1.0, "Y5": 1.0, "Y2": 0.8, "Y4": 0.8, "N0": 0.6}
 SEVERE_MULT = 2.0
 EMOTION_TRAFFIC = {"upset": 0.042, "happy": 0.216, "neutral": 0.742}     # share of user turns in the opt-in sample (aggregate statistic)
@@ -437,7 +440,21 @@ def aggregate(probes, key, judgments):
         tot = sum(w)
         return sum(ww * sc[p["id"]] for ww, p in zip(w, ps)) / tot if tot else float("nan")
 
+    def side(classes, emo):
+        num = den = 0.0
+        for c in classes:
+            if c in by_class:
+                num += CLASS_WEIGHT[c] * wmean(by_class[c], emo)
+                den += CLASS_WEIGHT[c]
+        return num / den if den else float("nan")
+
     def combine(emo):
+        """Returns (A, R, P): A = 100 * harmonic mean of R and P."""
+        r, p = side(RECALL_SIDE, emo), side(RESTRAINT_SIDE, emo)
+        a = 200.0 * r * p / (r + p) if (r + p) > 0 else 0.0
+        return a, 100.0 * r, 100.0 * p
+
+    def arith(emo):
         num = den = 0.0
         for c, wt in CLASS_WEIGHT.items():
             if c in by_class:
@@ -451,7 +468,9 @@ def aggregate(probes, key, judgments):
     over = [over_recalled(k, j) for k, j in turns_j if over_recalled(k, j) is not None]
     hs = [j for k, j in turns_j if k["class"] == "H"]
     nats = [j["naturalness"] for k, j in turns_j if j.get("naturalness") is not None]
-    out = {"n_items": len(items), "A_nat": combine(False), "A_nat_traffic": combine(True),
+    (a_main, r_side, p_side), (a_traffic, _, _) = combine(False), combine(True)
+    out = {"n_items": len(items), "A_nat": a_main, "A_nat_traffic": a_traffic, "R_side": r_side, "P_side": p_side,
+           "A_nat_arithmetic": arith(False),
            "A_nat_plain": 100.0 * sum(sc[p["id"]] for p in items) / len(items) if items else float("nan"),
            "by_class": {c: round(100.0 * wmean(ps), 1) for c, ps in by_class.items()},
            "recall_rate": 100.0 * sum(1 for j in xs if j.get("target_recalled") and j.get("responsive")) / len(xs) if xs else float("nan"),

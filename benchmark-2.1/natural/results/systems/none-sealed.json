@@ -6,8 +6,11 @@
  "judge_sha": "fc44fad69af7ac9fda8c382f08b5ef00164fea536e3bea40d8490724e2aa6b56",
  "metrics": {
   "n_items": 134,
-  "A_nat": 56.16806722689075,
-  "A_nat_traffic": 56.87141837065448,
+  "A_nat": 21.96289646918013,
+  "A_nat_traffic": 24.16475117912698,
+  "R_side": 12.336134453781513,
+  "P_side": 100.0,
+  "A_nat_arithmetic": 56.16806722689075,
   "A_nat_plain": 54.62686567164179,
   "by_class": {
    "H": 42.9,

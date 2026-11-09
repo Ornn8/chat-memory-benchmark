@@ -50,7 +50,7 @@ def main():
         n = nat[s]
         if n:
             met = n["metrics"]
-            r["natural"] = {"A": met["A_nat"], "A_plain": met["A_nat_plain"], "A_traffic": met["A_nat_traffic"], "C": n["cost_cny"]["total_C"],
+            r["natural"] = {"A": met["A_nat"], "A_plain": met["A_nat_plain"], "A_arith": met.get("A_nat_arithmetic"), "R": met.get("R_side"), "P": met.get("P_side"), "A_traffic": met["A_nat_traffic"], "C": n["cost_cny"]["total_C"],
                             "S": scoring.composite(met["A_nat"], n["cost_cny"]["total_C"], c_ref), "by_class": met["by_class"],
                             "recall": met["recall_rate"], "restraint": met["restraint_rate"], "fabrication": met["fabrication_rate"],
                             "hedge": met["hedge_pass_rate"], "naturalness": met["naturalness_mean"], "leaks": len(n["leak_flags"]), "contam": n["n_contaminated"]}
@@ -73,12 +73,12 @@ def main():
         if "composite_S" not in r:
             continue
         L.append(f"| {s}{' (全塞抽样)' if r['short'] and r['short']['sampled'] else ''} | {r['composite_S']:.1f} | {r['composite_A']:.1f} | {f3(r['short'])} | {f3(r['long'])} | {f3(r['natural'])} | {'是' if r['qualifies_floor'] else '否'} |")
-    L += ["", "## 自然用记忆榜明细", "", "| 系统 | A | 想起率 | 克制率 | 编造率 | 拿不准通过率 | 自然度(0-2) | C(¥) | S | 泄漏 | 尾巴污染 |", "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    L += ["", "## 自然用记忆榜明细", "", "A = 想起侧 R（X、H）与克制侧 P（Y、N0、Z）的调和平均；R、P 为该侧各类得分的加权平均。", "", "| 系统 | A | R | P | 想起率 | 克制率 | 编造率 | 拿不准通过率 | 自然度(0-2) | C(¥) | S | 泄漏 | 尾巴污染 |", "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
     for s, r in sorted(rows.items(), key=lambda kv: -(kv[1]["natural"]["S"] if kv[1]["natural"] else -1e9)):
         n = r["natural"]
         if not n:
             continue
-        L.append(f"| {s} | {n['A']:.1f} | {n['recall']:.1f} | {n['restraint']:.1f} | {n['fabrication']:.1f} | {n['hedge']:.1f} | {n['naturalness']:.2f} | {n['C']:.3f} | {n['S']:.1f} | {n['leaks']} | {n['contam']} |")
+        L.append(f"| {s} | {n['A']:.1f} | {n['R']:.1f} | {n['P']:.1f} | {n['recall']:.1f} | {n['restraint']:.1f} | {n['fabrication']:.1f} | {n['hedge']:.1f} | {n['naturalness']:.2f} | {n['C']:.3f} | {n['S']:.1f} | {n['leaks']} | {n['contam']} |")
     L += ["", "各类得分（X 该提 / H 拿不准 / Y 不该提 / Z 都行 / N0 无关对照）：", ""]
     for s, r in rows.items():
         if r["natural"]:
