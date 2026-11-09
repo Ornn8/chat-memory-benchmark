@@ -39,7 +39,7 @@ Codex 会根据项目的接入方式完成测试，并使用本仓库的判分�
 
 ## 已经测过哪些
 
-查看[最新成绩与费用综合盘点（2026 年 11 月 8 日）](results/2026-11-08-recap.md)，或查看[此前的成绩盘点](results/2026-11-07-recap.md)。下面列出 24 个已有成绩的项目，以及 Qwen 对照；BioCore 测试中止，单独列出。独立运行和外挂 Qwen 等不同配置不另算项目。完整卷和共同已答题的范围不同，比较请看各行链接里的同卷成绩。
+查看[最新成绩与费用综合盘点（2026 年 11 月 8 日）](results/2026-11-08-recap.md)，或查看[此前的成绩盘点](results/2026-11-07-recap.md)。下面列出 25 个已有成绩的项目，以及 Qwen 对照；BioCore 测试中止，单独列出。独立运行和外挂 Qwen 等不同配置不另算项目。完整卷和共同已答题的范围不同，比较请看各行链接里的同卷成绩。
 
 | 项目／上游 | 作者 | 测试状态与成绩（通过 / 已答） |
 | --- | --- | --- |
@@ -68,6 +68,7 @@ Codex 会根据项目的接入方式完成测试，并使用本仓库的判分�
 | [dsh-memory-calendar](https://github.com/IStarFoxI/dsh-memory-calendar) | IStarFoxI | 505 / 714；[成绩盘点](results/2026-11-08-recap.md) |
 | [dsh-hippocampus](https://github.com/coner13/dsh-hippocampus) | coner13 | 528 / 714；[成绩盘点](results/2026-11-08-recap.md) |
 | [dsh-memory-brain](https://github.com/y083245/dsh-memory-brain) | y083245 | 583 / 714；[成绩盘点](results/2026-11-08-recap.md) |
+| [PMem](https://github.com/dnciyun/dsh-PMem) | dnciyun | 0.41.0 完整卷 618 / 714；同版本关闭两个增强模块 583 / 713；[材料与配置](results/submissions/pmem-0.41.0-2026-11-09/README.md) |
 | Qwen RAG（本评测搭建的检索对照） | Qwen 模型团队；检索流程由本评测搭建 | 完整卷 [596 / 714](results/2026-11-01-first-four.md)；合辑共同题 [574 / 687](results/2026-11-01.md) |
 
 各项目的固定版本、实际接入方式、维护开关和局限统一放在[测试配置与局限](docs/tested-configurations.md)。作者署名沿用评测登记信息。
