@@ -1,0 +1,397 @@
+{
+  "created_at": "2026-11-10T03:15:37+08:00",
+  "total_questions": 714,
+  "answered": 714,
+  "judged": 714,
+  "passed": 624,
+  "accuracy": 0.87395,
+  "accuracy_text": "87.4%",
+  "judge_errors": 0,
+  "answer_errors": 0,
+  "retrieval_errors": 0,
+  "timing": {
+    "ingest_seconds": 26.286,
+    "retrieval_seconds": 10.726,
+    "answer_seconds": 599.211,
+    "judge_seconds": 695.198,
+    "run_wall_seconds": 141.909,
+    "judge_wall_seconds": 119.0,
+    "end_to_end_wall_seconds": 260.909,
+    "memory_ops_seconds": 37.012,
+    "ingest_share": 0.7102
+  },
+  "tokens": {
+    "answer_prompt": 552335,
+    "answer_completion": 24479,
+    "judge_prompt": 678055,
+    "judge_completion": 65103,
+    "total": 1319972
+  },
+  "cost_cny": {
+    "answer": 0.842725,
+    "judge": 1.216253,
+    "total": 2.058979
+  },
+  "error_counts": {
+    "必答项未满足": 88,
+    "错误否认": 45,
+    "命中禁止项": 13,
+    "编造日期": 11,
+    "把未知当事实": 10,
+    "认错主体": 2,
+    "违反边界": 2,
+    "不当披露私事": 1
+  },
+  "by_dimension": [
+    {
+      "label": "维度",
+      "key": "事实",
+      "n": 393,
+      "passed": 339,
+      "accuracy": 0.8626,
+      "accuracy_text": "86.3%"
+    },
+    {
+      "label": "维度",
+      "key": "约定/计划",
+      "n": 219,
+      "passed": 184,
+      "accuracy": 0.8402,
+      "accuracy_text": "84.0%"
+    },
+    {
+      "label": "维度",
+      "key": "改口/变化",
+      "n": 161,
+      "passed": 138,
+      "accuracy": 0.8571,
+      "accuracy_text": "85.7%"
+    },
+    {
+      "label": "维度",
+      "key": "假设/资料不足",
+      "n": 126,
+      "passed": 116,
+      "accuracy": 0.9206,
+      "accuracy_text": "92.1%"
+    },
+    {
+      "label": "维度",
+      "key": "边界/敏感",
+      "n": 108,
+      "passed": 105,
+      "accuracy": 0.9722,
+      "accuracy_text": "97.2%"
+    },
+    {
+      "label": "维度",
+      "key": "时间",
+      "n": 52,
+      "passed": 41,
+      "accuracy": 0.7885,
+      "accuracy_text": "78.8%"
+    }
+  ],
+  "by_tag": [
+    {
+      "label": "考点",
+      "key": "第三方事实",
+      "n": 114,
+      "passed": 99,
+      "accuracy": 0.8684,
+      "accuracy_text": "86.8%"
+    },
+    {
+      "label": "考点",
+      "key": "边界",
+      "n": 68,
+      "passed": 65,
+      "accuracy": 0.9559,
+      "accuracy_text": "95.6%"
+    },
+    {
+      "label": "考点",
+      "key": "偏好",
+      "n": 66,
+      "passed": 51,
+      "accuracy": 0.7727,
+      "accuracy_text": "77.3%"
+    },
+    {
+      "label": "考点",
+      "key": "计划",
+      "n": 65,
+      "passed": 57,
+      "accuracy": 0.8769,
+      "accuracy_text": "87.7%"
+    },
+    {
+      "label": "考点",
+      "key": "计划假设梦转述猜测",
+      "n": 65,
+      "passed": 61,
+      "accuracy": 0.9385,
+      "accuracy_text": "93.8%"
+    },
+    {
+      "label": "考点",
+      "key": "带条件或期限的偏好和边界",
+      "n": 59,
+      "passed": 49,
+      "accuracy": 0.8305,
+      "accuracy_text": "83.1%"
+    },
+    {
+      "label": "考点",
+      "key": "助手自己说过的话",
+      "n": 58,
+      "passed": 49,
+      "accuracy": 0.8448,
+      "accuracy_text": "84.5%"
+    },
+    {
+      "label": "考点",
+      "key": "真实变化",
+      "n": 58,
+      "passed": 49,
+      "accuracy": 0.8448,
+      "accuracy_text": "84.5%"
+    },
+    {
+      "label": "考点",
+      "key": "分散的线索",
+      "n": 56,
+      "passed": 43,
+      "accuracy": 0.7679,
+      "accuracy_text": "76.8%"
+    },
+    {
+      "label": "考点",
+      "key": "用户的基本信息",
+      "n": 56,
+      "passed": 40,
+      "accuracy": 0.7143,
+      "accuracy_text": "71.4%"
+    },
+    {
+      "label": "考点",
+      "key": "资料不足",
+      "n": 56,
+      "passed": 50,
+      "accuracy": 0.8929,
+      "accuracy_text": "89.3%"
+    },
+    {
+      "label": "考点",
+      "key": "约定和欠账",
+      "n": 55,
+      "passed": 45,
+      "accuracy": 0.8182,
+      "accuracy_text": "81.8%"
+    },
+    {
+      "label": "考点",
+      "key": "职业",
+      "n": 51,
+      "passed": 38,
+      "accuracy": 0.7451,
+      "accuracy_text": "74.5%"
+    },
+    {
+      "label": "考点",
+      "key": "假设",
+      "n": 49,
+      "passed": 49,
+      "accuracy": 1.0,
+      "accuracy_text": "100.0%"
+    },
+    {
+      "label": "考点",
+      "key": "时间题",
+      "n": 48,
+      "passed": 37,
+      "accuracy": 0.7708,
+      "accuracy_text": "77.1%"
+    },
+    {
+      "label": "考点",
+      "key": "称呼条件",
+      "n": 48,
+      "passed": 48,
+      "accuracy": 1.0,
+      "accuracy_text": "100.0%"
+    },
+    {
+      "label": "考点",
+      "key": "纠错",
+      "n": 48,
+      "passed": 44,
+      "accuracy": 0.9167,
+      "accuracy_text": "91.7%"
+    },
+    {
+      "label": "考点",
+      "key": "没解释的矛盾",
+      "n": 47,
+      "passed": 38,
+      "accuracy": 0.8085,
+      "accuracy_text": "80.9%"
+    },
+    {
+      "label": "考点",
+      "key": "相对日期",
+      "n": 44,
+      "passed": 39,
+      "accuracy": 0.8864,
+      "accuracy_text": "88.6%"
+    },
+    {
+      "label": "考点",
+      "key": "转述",
+      "n": 44,
+      "passed": 44,
+      "accuracy": 1.0,
+      "accuracy_text": "100.0%"
+    },
+    {
+      "label": "考点",
+      "key": "共同编的故事",
+      "n": 43,
+      "passed": 38,
+      "accuracy": 0.8837,
+      "accuracy_text": "88.4%"
+    },
+    {
+      "label": "考点",
+      "key": "时间约定",
+      "n": 43,
+      "passed": 37,
+      "accuracy": 0.8605,
+      "accuracy_text": "86.0%"
+    },
+    {
+      "label": "考点",
+      "key": "没说完要跟进的事",
+      "n": 42,
+      "passed": 35,
+      "accuracy": 0.8333,
+      "accuracy_text": "83.3%"
+    },
+    {
+      "label": "考点",
+      "key": "改口",
+      "n": 40,
+      "passed": 36,
+      "accuracy": 0.9,
+      "accuracy_text": "90.0%"
+    },
+    {
+      "label": "考点",
+      "key": "敏感的事",
+      "n": 40,
+      "passed": 39,
+      "accuracy": 0.975,
+      "accuracy_text": "97.5%"
+    },
+    {
+      "label": "考点",
+      "key": "生日",
+      "n": 40,
+      "passed": 40,
+      "accuracy": 1.0,
+      "accuracy_text": "100.0%"
+    },
+    {
+      "label": "考点",
+      "key": "相似事件",
+      "n": 40,
+      "passed": 38,
+      "accuracy": 0.95,
+      "accuracy_text": "95.0%"
+    }
+  ],
+  "by_persona": [
+    {
+      "label": "人物",
+      "key": "P17",
+      "n": 172,
+      "passed": 142,
+      "accuracy": 0.8256,
+      "accuracy_text": "82.6%"
+    },
+    {
+      "label": "人物",
+      "key": "P20",
+      "n": 170,
+      "passed": 151,
+      "accuracy": 0.8882,
+      "accuracy_text": "88.8%"
+    },
+    {
+      "label": "人物",
+      "key": "P16",
+      "n": 123,
+      "passed": 110,
+      "accuracy": 0.8943,
+      "accuracy_text": "89.4%"
+    },
+    {
+      "label": "人物",
+      "key": "P01",
+      "n": 88,
+      "passed": 79,
+      "accuracy": 0.8977,
+      "accuracy_text": "89.8%"
+    },
+    {
+      "label": "人物",
+      "key": "P14",
+      "n": 82,
+      "passed": 74,
+      "accuracy": 0.9024,
+      "accuracy_text": "90.2%"
+    },
+    {
+      "label": "人物",
+      "key": "P12",
+      "n": 79,
+      "passed": 68,
+      "accuracy": 0.8608,
+      "accuracy_text": "86.1%"
+    }
+  ],
+  "by_interval": [
+    {
+      "label": "间隔",
+      "key": "0",
+      "n": 189,
+      "passed": 168,
+      "accuracy": 0.8889,
+      "accuracy_text": "88.9%"
+    },
+    {
+      "label": "间隔",
+      "key": "3",
+      "n": 184,
+      "passed": 162,
+      "accuracy": 0.8804,
+      "accuracy_text": "88.0%"
+    },
+    {
+      "label": "间隔",
+      "key": "15",
+      "n": 174,
+      "passed": 150,
+      "accuracy": 0.8621,
+      "accuracy_text": "86.2%"
+    },
+    {
+      "label": "间隔",
+      "key": "45",
+      "n": 167,
+      "passed": 144,
+      "accuracy": 0.8623,
+      "accuracy_text": "86.2%"
+    }
+  ]
+}
