@@ -1,9 +1,15 @@
-# results: add DSH-DREAM v0.3.6 (87.4%, ¥2.05)
+> **Scope**: This result is an **Author-reported** score for a **Raw-turn Retrieval Configuration** (isolating RAGStore + Flat/BM25/RRF + `timeline_mode`). It does **NOT** include the MemoryAgent fact-extraction pipeline. It is **not** a fully independently reproduced end-to-end score.
+
+# results: add DSH-DREAM v0.3.6 Raw-turn Retrieval Configuration (87.4%, ¥2.05)
 
 ## Summary
 
-This PR adds a complete 714-question result for **DSH-DREAM v0.3.6** on the
-Chat-Memory-Benchmark 1.0 six-persona set.
+This PR adds a **Raw-turn Retrieval Configuration** result for **DSH-DREAM
+v0.3.6** on the Chat-Memory-Benchmark 1.0 six-persona set. It deliberately
+isolates the storage + retrieval path: raw user/assistant turns are replayed
+into an isolated sqlite-vec store, and answers are generated from the retrieved
+`<memory-hint>` only. The MemoryAgent fact-extraction / rewrite / consolidation
+pipeline is **not** part of this measurement.
 
 - **System:** DSH-DREAM v0.3.6 — sqlite-vec + local ONNX BGE embedding,
   vector + BM25 retrieval fused with RRF.
@@ -13,6 +19,15 @@ Chat-Memory-Benchmark 1.0 six-persona set.
   estimated from token counts at the repository's `prices.json` rates).
 - **Runtime:** 141.9 s answer stage + 119.0 s judge stage; 260.9 s end to end
   with 6 workers.
+
+## Scope: what this result is and is not
+
+| | |
+| --- | --- |
+| **Is** | Author-reported score for the DSH-DREAM **Raw-turn Retrieval Configuration**: sqlite-vec storage, ONNX BGE embedding, Flat vector + BM25 → RRF, `timeline_mode=True`. |
+| **Is not** | An end-to-end DSH-DREAM chat-host run; it does not invoke MemoryAgent fact extraction, rewrite, or consolidation. |
+| **Is not** | An independently reproduced score by the benchmark maintainers. |
+| **Is** | A reproducible configuration with all 714 answers, per-question judgments, reasons, and a 10-question spot check. |
 
 ## Core finding: keep the event stream
 
@@ -57,7 +72,7 @@ A question may carry several tags, so dimensions do not sum to 714.
 
 ## Materials
 
-All files are under `results/dsh-dream-v0.3.6/`:
+All files are under `results/submissions/dsh-dream-v0.3.6/`:
 
 | File | Content |
 | --- | --- |
@@ -67,6 +82,8 @@ All files are under `results/dsh-dream-v0.3.6/`:
 | `judgments.jsonl` | 714 per-question judgments, flags, and reasons |
 | `summary.json` | Machine-readable aggregate |
 | `reproduce.md` | Exact configuration, replay/judge pipeline, 10-question A/B |
+| `spot_check.md` | 10-question stratified spot check (question, answer, judge reason, consistency) |
+| `spot_check.py` | Deterministic sampler used to generate the spot check |
 | `README.md` | Submission overview and caveats |
 
 ## Three representative failures
@@ -96,18 +113,17 @@ All files are under `results/dsh-dream-v0.3.6/`:
   maintainers can spot-check; the score should be read as an author-run result.
 - No API key, private chat, live database, or SQLite file is included.
 
-## Layout note
+## Layout
 
-The files are in `results/dsh-dream-v0.3.6/` as requested for this submission.
-The repository's `docs/submit-results.md` suggests
-`results/submissions/<project>-<version>/`; I am happy to move the directory if
-maintainers prefer the documented layout.
+Files follow the repository's documented submission layout:
+`results/submissions/dsh-dream-v0.3.6/`.
 
 ## Checklist
 
 - [x] Used the 714-question 1.0 six-persona set and recorded the exam SHA-256.
 - [x] All 714 questions answered; no fabricated or placeholder answers.
 - [x] Per-question answers, judgments, and reasons included.
+- [x] 10-question stratified spot check included (8 pass / 2 fail, 10/10 bookkeeping consistency).
 - [x] Per-persona memory isolation; only pre-cutoff history ingested.
 - [x] No question/answer written back into later memory.
 - [x] No SQLite database, API key, or local absolute path committed.

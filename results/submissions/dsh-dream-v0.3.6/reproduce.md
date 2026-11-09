@@ -1,4 +1,6 @@
-# Reproduction — DSH-DREAM v0.3.6 on Chat-Memory-Benchmark 1.0
+> **Scope**: This result is an **Author-reported** score for a **Raw-turn Retrieval Configuration** (isolating RAGStore + Flat/BM25/RRF + `timeline_mode`). It does **NOT** include the MemoryAgent fact-extraction pipeline. It is **not** a fully independently reproduced end-to-end score.
+
+# Reproduction — DSH-DREAM v0.3.6 (Raw-turn Retrieval Configuration)
 
 This directory is a frozen results submission. It contains the 714 answers,
 the per-question judgments, the aggregate, and the full report. The harness is
@@ -16,7 +18,7 @@ described below so the run can be repeated without reversing the outputs.
 - Histories and answer key are used unmodified. The answer key is only read by
   the judge, never by the answering model.
 
-## 2. System under test
+## 2. Configuration under test (raw-turn retrieval)
 
 - DSH-DREAM v0.3.6.
 - Storage: sqlite-vec.
@@ -27,6 +29,9 @@ described below so the run can be repeated without reversing the outputs.
 - Answer model: `deepseek-flash` (DeepSeek API), temperature 0, thinking
   disabled, `max_tokens=450`, 6 concurrent workers.
 - Judge model: `deepseek-flash`, temperature 0, thinking disabled.
+- **Out of scope:** MemoryAgent fact extraction, rewrite, and consolidation are
+  not run. This is an author-reported measurement of the store + hybrid
+  retrieval path, not an independently reproduced end-to-end chat-host score.
 
 ## 3. Isolation and replay
 

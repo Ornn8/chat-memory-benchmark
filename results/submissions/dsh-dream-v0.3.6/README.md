@@ -1,4 +1,6 @@
-# DSH-DREAM v0.3.6 — Chat-Memory-Benchmark 1.0
+> **Scope**: This result is an **Author-reported** score for a **Raw-turn Retrieval Configuration** (isolating RAGStore + Flat/BM25/RRF + `timeline_mode`). It does **NOT** include the MemoryAgent fact-extraction pipeline. It is **not** a fully independently reproduced end-to-end score.
+
+# DSH-DREAM v0.3.6 — Chat-Memory-Benchmark 1.0 (Raw-turn Retrieval Configuration)
 
 ## Submission
 
@@ -12,6 +14,14 @@
 | Dataset | `datasets/natural-timegrid-20261101-v2/` |
 | Exam SHA-256 | `584e1acd8f2dc334be5859e31e689f9e684f24be88e6d9c808318698c4ea6c63` |
 | Test date | 2026-11-10 (Asia/Shanghai) |
+
+## Scope
+
+This is an **author-reported Raw-turn Retrieval Configuration** result. It
+isolates DSH-DREAM's storage and retrieval path (sqlite-vec + ONNX BGE +
+Flat/BM25/RRF + `timeline_mode`) and does **not** run the MemoryAgent fact
+extraction, rewrite, or consolidation pipeline. It is not an independently
+reproduced end-to-end chat-host score.
 
 ## Score
 
@@ -54,6 +64,8 @@ A question may carry several tags, so dimension counts do not add up to 714.
 | `judgments.jsonl` | 714 per-question judgments and reasons |
 | `summary.json` | Machine-readable aggregate |
 | `reproduce.md` | Reproduction configuration and the 10-question A/B |
+| `spot_check.md` | 10-question stratified spot check with question, answer, judge reason, and consistency |
+| `spot_check.py` | Deterministic sampler used to generate `spot_check.md` |
 | `PR_DESCRIPTION.md` | Ready-to-paste Pull Request body |
 
 ## Caveats

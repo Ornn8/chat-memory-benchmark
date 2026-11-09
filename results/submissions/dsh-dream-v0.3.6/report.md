@@ -1,4 +1,8 @@
+> **Scope**: This result is an **Author-reported** score for a **Raw-turn Retrieval Configuration** (isolating RAGStore + Flat/BM25/RRF + `timeline_mode`). It does **NOT** include the MemoryAgent fact-extraction pipeline. It is **not** a fully independently reproduced end-to-end score.
+
 # DSH-DREAM × Chat-Memory-Benchmark 评测报告
+
+**Configuration: Raw-turn Retrieval (RAGStore + Flat/BM25/RRF + timeline_mode)**
 
 > 生成时间：2026-11-10T03:15:37+08:00
 >
@@ -186,10 +190,11 @@
 | 项目 | 值 |
 | --- | --- |
 | 数据集 | natural-timegrid-20261101-v2（714 题 / 6 人物） |
-| 系统 | DSH-DREAM 0.3.6 / sqlite-vec / ONNX bge-small-zh-v1.5 |
+| 系统 | DSH-DREAM 0.3.6（Raw-turn Retrieval Configuration） |
 | 检索 | search_memory(top_k=8, timeline_mode=True)，向量 Flat + BM25 → RRF → 时间升序 |
 | 答题 | deepseek-flash，temperature=0，thinking disabled |
 | 判分 | LLM rubric judge（required/forbidden/unknown + 错误标志） |
+| 抽样复核 | `spot_check.md`（10 题 / 6 维度 / 8 通过 / 2 失败） |
 | 数据库 | 临时测试库（每人隔离重建，运行后删除） |
 | 运行命令 | `run_benchmark.py` → `evaluate.py --report` |
 
