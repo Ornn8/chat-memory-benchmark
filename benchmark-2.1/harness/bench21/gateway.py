@@ -101,7 +101,7 @@ class State:
     cache = None
     cap_usd = 9.5
     keys = {}
-    sem = {"deepseek": threading.Semaphore(4), "dash": threading.Semaphore(int(os.environ.get("BENCH21_DASH_CONCURRENCY", "6")))}
+    sem = {"deepseek": threading.Semaphore(int(os.environ.get("BENCH21_DEEPSEEK_CONCURRENCY", "4"))), "dash": threading.Semaphore(int(os.environ.get("BENCH21_DASH_CONCURRENCY", "6")))}
 
 
 def _key(provider):
@@ -140,6 +140,7 @@ def _post(url, body, provider, extra_headers=None, timeout=300, retries=6):
     raise RuntimeError("upstream failed: " + str(last))
 
 
+UPSTREAM = os.environ.get("BENCH21_BAILIAN_UPSTREAM", "").rstrip("/")   # e.g. http://127.0.0.1:18877 : forward Bailian calls to another gateway that holds the key
 LOCAL_URL = os.environ.get("BENCH21_LOCAL_URL", "")        # OpenAI-compatible server for local models, e.g. http://127.0.0.1:8000/v1
 PRICE_AS = "deepseek-v4.1-flash"                           # local models are priced as flash
 
@@ -156,6 +157,27 @@ def _local_post(path, body):
     req = urllib.request.Request(LOCAL_URL.rstrip("/") + path, data=data, headers={"Content-Type": "application/json"}, method="POST")
     with urllib.request.urlopen(req, timeout=600) as resp:
         return json.loads(resp.read().decode("utf-8"))
+
+
+def _upstream_post(path, body, meta):
+    """Forward a Bailian call to the gateway that holds the Bailian key (BENCH21_BAILIAN_UPSTREAM); same accounting headers."""
+    data = json.dumps(body, ensure_ascii=False).encode("utf-8")
+    hdr = {"Content-Type": "application/json", "Authorization": "Bearer evaluator-gateway",
+           "X-Bench-Run": meta["run"], "X-Bench-System": meta["system"], "X-Bench-Phase": meta["phase"], "X-Bench-Tag": meta["tag"]}
+    last = None
+    for attempt in range(5):
+        try:
+            req = urllib.request.Request(UPSTREAM + path, data=data, headers=hdr, method="POST")
+            with urllib.request.urlopen(req, timeout=300) as r:
+                return json.loads(r.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            last = f"HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:200]}"
+            if e.code in (400, 402, 404):
+                raise RuntimeError(last)
+        except Exception as e:  # noqa
+            last = f"{type(e).__name__}: {str(e)[:120]}"
+        time.sleep(min(20, 2 ** attempt))
+    raise RuntimeError("upstream failed: " + str(last))
 
 
 def _provider_for_chat(model):
@@ -246,6 +268,11 @@ class H(BaseHTTPRequestHandler):
             u = resp.get("usage") or {}
             self._record(meta, "chat", _priced(model), u.get("prompt_tokens", 0), u.get("completion_tokens", 0), cached, secs)
             return resp
+        if prov == "dash" and UPSTREAM:
+            resp, cached, secs = self._cached("chat", b, lambda: _upstream_post("/v1/chat/completions", b, meta))
+            u = resp.get("usage") or {}
+            self._record(meta, "chat", model, u.get("prompt_tokens", 0), u.get("completion_tokens", 0), cached, 0.0)
+            return resp
         if prov == "dash":
             b.setdefault("enable_thinking", False)
         if prov == "deepseek" and CHAT_UPSTREAM_MODEL:
@@ -266,6 +293,11 @@ class H(BaseHTTPRequestHandler):
             self._record(meta, "embed", _priced(model), u.get("prompt_tokens", u.get("total_tokens", 0)), 0, cached, secs)
             return resp
         PRICES["models"][model]
+        if UPSTREAM:
+            resp, cached, secs = self._cached("embed", body, lambda: _upstream_post("/v1/embeddings", body, meta))
+            tok = (resp.get("usage") or {}).get("total_tokens", 0)
+            self._record(meta, "embed", model, tok, 0, cached, 0.0)
+            return resp
         texts = body["input"]
         is_q = body.get("text_type") == "query"
         params = {"dimension": body.get("dimensions", 2560), "text_type": "query" if is_q else "document"}
@@ -289,6 +321,11 @@ class H(BaseHTTPRequestHandler):
             self._record(meta, "rerank", _priced(model), u.get("prompt_tokens", u.get("total_tokens", 0)), 0, cached, secs)
             return resp
         PRICES["models"][model]
+        if UPSTREAM:
+            resp, cached, secs = self._cached("rerank", body, lambda: _upstream_post("/v1/rerank", body, meta))
+            tok = (resp.get("usage") or {}).get("total_tokens", 0)
+            self._record(meta, "rerank", model, tok, 0, cached, 0.0)
+            return resp
         nb = {"model": model, "input": {"query": body["query"], "documents": body["documents"]},
               "parameters": {"top_n": body.get("top_n", len(body["documents"])), "return_documents": False,
                              "instruct": body.get("instruct", DEFAULT_INSTRUCT)}}

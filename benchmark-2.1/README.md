@@ -6,6 +6,7 @@
 | --- | --- | --- | --- |
 | 短对话榜 | M01 宋雨橙 | 3000 轮 / 约 180 天 | 话痨型，短句、错别字、表情，一天几十轮 |
 | 长对话榜 | M02 孟远舟 | 2500 轮 / 约 180 天 | 长信型，一天一两封长信，偶尔深夜补充 |
+| 自然用记忆榜 | 同上两个人物 | 同上 | 168 题：该提的时候主动提、不该提时不翻旧账、说得像人、拿不准不编。题目设计基于已同意「帮助改进」的用户的聚合统计，没有使用任何用户原文，所有对话均为合成。见 [natural/](natural/README.md) |
 
 **挑战赛截止：2026-12-09 23:59（北京时间）。** 规则见 [RULES.md](RULES.md)。
 
@@ -16,6 +17,7 @@
 | 规则、奖品、参赛要求 | [RULES.md](RULES.md) |
 | 计分方法：成绩 A、成本 C、综合分 S、泄漏哨兵 | [SCORING.md](SCORING.md) |
 | 公开开发集（212 题）、两个人物的完整历史、封存集的 SHA 承诺 | [dataset/](dataset/) |
+| 自然用记忆榜：数据（开发集 34 题 + 封存集 SHA）、结果、说明 | [natural/](natural/README.md) |
 | 评测程序：网关、记忆隔离、泄漏哨兵、计分、适配器接口 | [harness/](harness/README.md) |
 | 榜单（Qwen 为实时重跑；A、C、S 三列 + 成绩—成本散点图 + 带环境标注的旧成绩） | [results/](results/README.md) |
 | 判分员校准、宽松度检验、独立复查、勘误 | [errata/ERRATA-2.1.md](errata/ERRATA-2.1.md)、[results/judge-checks.md](results/judge-checks.md) |
@@ -37,7 +39,7 @@
 git clone https://github.com/Ornn8/chat-memory-benchmark.git
 cd chat-memory-benchmark
 python benchmark-2.1/dataset/read_exam_v21.py            # 校验公开部分（不联网、无依赖）
-python -m unittest tests.test_bench21                     # 评测程序的离线测试
+python -m unittest tests.test_bench21 tests.test_natural   # 评测程序的离线测试
 ```
 
 跑系统需要网关和供应商密钥，见 [harness/README.md](harness/README.md)。

@@ -1,0 +1,37 @@
+{
+ "system": "qwen-base",
+ "split": "sealed",
+ "run": "NR1",
+ "scoring_version": "natural-score-v1",
+ "judge_sha": "fc44fad69af7ac9fda8c382f08b5ef00164fea536e3bea40d8490724e2aa6b56",
+ "metrics": {
+  "n_items": 134,
+  "A_nat": 60.34105042016806,
+  "A_nat_traffic": 59.9293925988777,
+  "A_nat_plain": 60.55970149253732,
+  "by_class": {
+   "H": 37.1,
+   "N0": 93.8,
+   "X": 23.5,
+   "Y": 92.8,
+   "Z": 100.0
+  },
+  "recall_rate": 26.785714285714285,
+  "restraint_rate": 93.75,
+  "fabrication_rate": 0.5681818181818182,
+  "hedge_pass_rate": 16.666666666666668,
+  "naturalness_mean": 1.9838709677419355,
+  "n_turns_judged": 176,
+  "judge_format_failures": 0
+ },
+ "cost_cny": {
+  "ingest": 0.5939,
+  "retrieve": 1.0051,
+  "memory_in_prompt": 0.7493,
+  "total_C": 2.3483,
+  "memory_tokens_total": 578199
+ },
+ "leak_flags": [],
+ "tail_contamination": [],
+ "n_contaminated": 0
+}

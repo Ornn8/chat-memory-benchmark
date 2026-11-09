@@ -1,1 +1,1 @@
-{"cost_coef": 3.0, "cost_floor_ratio": 0.25}
+{"cost_coef": 3.0, "cost_floor_ratio": 0.25, "board_weights": {"short": 0.375, "long": 0.375, "natural": 0.25}, "floor_restraint_pct": 70.0, "floor_fabrication_pct": 5.0}

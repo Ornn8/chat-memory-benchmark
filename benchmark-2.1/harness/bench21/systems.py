@@ -93,6 +93,15 @@ class System:
     def retrieve(self, question, now, cutoff_turn, item_id=None):
         raise NotImplementedError
 
+    # Natural-use board: the evaluator feeds a short per-probe "tail" after the cutoff, then asks the system to forget it again.
+    def mark(self):
+        """Token for the current memory state (default: number of turns ingested)."""
+        return len(getattr(self, "turns", []))
+
+    def rewind(self, token):
+        """Drop everything ingested after mark()."""
+        raise NotImplementedError
+
 
 # ---------------------------------------------------------------- presentation
 SYS_BASE = "你是用户长期聊天的伴侣，下面是你们过去的聊天片段和最近的对话，请根据记忆自然地回答用户这句话。"
@@ -202,14 +211,25 @@ class IncBM25:
     def __init__(self, k1=1.5, b=0.75):
         self.k1, self.b = k1, b
         self.dl, self.post, self.total = [], collections.defaultdict(list), 0
+        self.docs = []
 
     def add(self, text):
         idx = len(self.dl)
         tk = tokens(text)
         self.dl.append(len(tk))
         self.total += len(tk)
-        for w, c in collections.Counter(tk).items():
+        cnt = collections.Counter(tk)
+        self.docs.append(cnt)
+        for w, c in cnt.items():
             self.post[w].append((idx, c))
+
+    def truncate(self, n):
+        """Forget every document with index >= n (used by the natural-use board to drop a probe's tail)."""
+        for idx in range(len(self.dl) - 1, n - 1, -1):
+            for w in self.docs[idx]:
+                self.post[w].pop()
+            self.total -= self.dl[idx]
+        del self.dl[n:], self.docs[n:]
 
     def top(self, query, k):
         N = len(self.dl)
@@ -256,6 +276,12 @@ class QwenRag(System):
         self.bm.add(doc_text(turn))
         self.pending.append(len(self.turns) - 1)
 
+    def rewind(self, token):
+        del self.turns[token:]
+        del self.vecs[token:]
+        self.pending = [i for i in self.pending if i < token]
+        self.bm.truncate(token)
+
     def _flush(self, tag):
         pend, self.pending = self.pending, []
         if not pend:
@@ -300,6 +326,12 @@ class NoHistory(System):
     def ingest(self, turn):
         pass
 
+    def mark(self):
+        return 0
+
+    def rewind(self, token):
+        pass
+
     def retrieve(self, question, now, cutoff_turn, item_id=None):
         return Retrieval(SYS_BASE.split("，")[0] + "。你没有任何过去的聊天记录，请自然地回答用户这句话。", [])
 
@@ -323,6 +355,9 @@ class RecentN(System):
     def ingest(self, turn):
         self.turns.append(turn)
 
+    def rewind(self, token):
+        del self.turns[token:]
+
     def retrieve(self, question, now, cutoff_turn, item_id=None):
         rec = self.turns[-self.n:]
         text = "\n\n".join([SYS_BASE, "【最近的对话】"] + [fmt_base(t, now) for t in rec])
@@ -343,6 +378,10 @@ class FullContext(System):
     def ingest(self, turn):
         self.turns.append(turn)
         self.sizes.append(len(fmt_base(turn, "")) + 2)
+
+    def rewind(self, token):
+        del self.turns[token:]
+        del self.sizes[token:]
 
     def retrieve(self, question, now, cutoff_turn, item_id=None):
         budget = int(self.window / self.TOK_PER_CHAR)
@@ -366,6 +405,10 @@ class Bm25Local(System):
         self.turns.append(turn)
         self.bm.add(doc_text(turn))
 
+    def rewind(self, token):
+        del self.turns[token:]
+        self.bm.truncate(token)
+
     def retrieve(self, question, now, cutoff_turn, item_id=None):
         n = len(self.turns)
         picks = sorted(self.bm.top(question, TOP_K))
@@ -376,6 +419,48 @@ class Bm25Local(System):
                          {"retrieved_turns": [self.turns[i]["turn"] for i in picks]})
 
 
+NEVER_NOTE = "【这轮的要求】只回应用户当前这句话，不要提任何过去的事，也不要说‘你之前说过’。"
+ALWAYS_NOTE = "【这轮的要求】请在回复里自然地带上一件你记得的、和现在最相关的过去的事。"
+
+
+class TailOnly(System):
+    """Natural-use baseline 'never recall': no history at all, only the current conversation tail (turns after the cutoff)."""
+    name = "never-recall"
+
+    def __init__(self):
+        self.turns, self.tail_from = [], None
+
+    def ingest(self, turn):
+        self.turns.append(turn)
+
+    def mark(self):
+        return len(self.turns)
+
+    def begin_tail(self):
+        self.tail_from = len(self.turns)
+
+    def rewind(self, token):
+        del self.turns[token:]
+        self.tail_from = None
+
+    def retrieve(self, question, now, cutoff_turn, item_id=None):
+        tail = self.turns[self.tail_from:] if self.tail_from is not None else []
+        text = (chr(10) * 2).join([SYS_BASE.split("，")[0] + "。你没有任何过去的聊天记录。" + NEVER_NOTE] + (["【当前的对话】"] + [fmt_base(t, now) for t in tail] if tail else []))
+        return Retrieval(text, [t["turn"] for t in tail])
+
+
+class AlwaysRecall(Bm25Local):
+    """Natural-use baseline 'recall at every chance': BM25 top-10 + last 6 turns, and the prompt asks to bring up a related old thing."""
+
+    def __init__(self):
+        super().__init__()
+        self.name = "always-recall"
+
+    def retrieve(self, question, now, cutoff_turn, item_id=None):
+        r = super().retrieve(question, now, cutoff_turn, item_id)
+        return Retrieval(r.prompt + chr(10) * 2 + ALWAYS_NOTE, r.used_turns, r.meta)
+
+
 REGISTRY = {
     "qwen-base": lambda gw: QwenRag(gw, "base"),
     "r3": lambda gw: QwenRag(gw, "r3"),
@@ -383,5 +468,7 @@ REGISTRY = {
     "recent6": lambda gw: RecentN(6),
     "full-context": lambda gw: FullContext(),
     "bm25-recent6": lambda gw: Bm25Local(),
+    "never-recall": lambda gw: TailOnly(),
+    "always-recall": lambda gw: AlwaysRecall(),
     "vague": lambda gw: Vague(),
 }

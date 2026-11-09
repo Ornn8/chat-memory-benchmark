@@ -7,6 +7,10 @@ bench21/
   gateway.py      计量网关：持有供应商密钥，按 prices.json 给每次调用计价，账本写 runs/bench21/spend-ledger.jsonl
   systems.py      适配器接口 + 参考系统（qwen-base、r3、none、recent6、bm25-recent6、full-context）
   runner.py       评测程序：按截止轮喂历史、检索、答题、判分、汇总；--sentinel 跑泄漏哨兵
+  natural.py      自然用记忆榜：run / judge / confirm / summarize（尾巴、回退、多轮现场生成、判分、子分）
+  natural_report.py  三榜榜单与加权综合分、资格底线
+  natural_gen.py / natural_build.py  合成出题与组卷（需要私有的案例文件，供复核方法）
+  natural_sentinel.py  自然用记忆榜的泄漏哨兵
   scoring.py      通过规则、流量加权、成本 C、综合分 S（系数在 score_config.json）
   report.py       从运行结果生成榜单（A 加权 / 不加权、C、S、成对通过）
   prompts/judge.md  判分提示词（SHA 写进每条判分记录）
@@ -55,3 +59,10 @@ pytest ../tests/test_bench21.py                                                 
 ```
 
 封存集只在评分时由评测方持有；`--split sealed` 需要封存集目录。
+
+
+## 自然用记忆榜的接口
+
+在 `ingest` / `retrieve` 之外多两个方法：`mark()` 返回当前记忆状态的标记，`rewind(token)` 把尾巴（以及多轮题里现场接上的回复）丢掉、退回到标记时的状态。`System` 基类给了 `mark()` 的默认实现（已喂入的轮数）；`rewind` 必须自己实现。系统若有 `begin_tail()` 方法，评测程序会在喂尾巴前调用它。更多见 [../natural/README.md](../natural/README.md)。
+
+网关可以把百炼的请求转发给另一个持有百炼密钥的网关：`BENCH21_BAILIAN_UPSTREAM=http://127.0.0.1:18877`；对话模型并发数由 `BENCH21_DEEPSEEK_CONCURRENCY` 调。

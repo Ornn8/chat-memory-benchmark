@@ -1,0 +1,37 @@
+{
+ "system": "r3",
+ "split": "dev",
+ "run": "NR1",
+ "scoring_version": "natural-score-v1",
+ "judge_sha": "fc44fad69af7ac9fda8c382f08b5ef00164fea536e3bea40d8490724e2aa6b56",
+ "metrics": {
+  "n_items": 34,
+  "A_nat": 54.75000000000001,
+  "A_nat_traffic": 52.66776155736807,
+  "A_nat_plain": 57.94117647058823,
+  "by_class": {
+   "H": 92.5,
+   "N0": 100.0,
+   "X": 20.0,
+   "Y": 65.0,
+   "Z": 80.0
+  },
+  "recall_rate": 33.333333333333336,
+  "restraint_rate": 80.0,
+  "fabrication_rate": 5.0,
+  "hedge_pass_rate": 75.0,
+  "naturalness_mean": 1.9,
+  "n_turns_judged": 40,
+  "judge_format_failures": 0
+ },
+ "cost_cny": {
+  "ingest": 0.5462,
+  "retrieve": 0.2468,
+  "memory_in_prompt": 0.1943,
+  "total_C": 0.9874,
+  "memory_tokens_total": 149944
+ },
+ "leak_flags": [],
+ "tail_contamination": [],
+ "n_contaminated": 0
+}

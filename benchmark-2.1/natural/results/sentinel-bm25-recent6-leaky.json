@@ -1,0 +1,424 @@
+{
+ "system": "bm25-recent6",
+ "mode": "leaky-positive-control",
+ "n_points": 24,
+ "n_leaks": 24,
+ "leaks": [
+  "NAT-M01-N0-02",
+  "NAT-M01-X1-06",
+  "NAT-M01-X2-06",
+  "NAT-M01-X2-02",
+  "NAT-M01-X6-02",
+  "NAT-M01-Y1-04",
+  "NAT-M01-X2-05",
+  "NAT-M01-Z1-01",
+  "NAT-M01-X1-02",
+  "NAT-M01-X1-05",
+  "NAT-M01-X1-09",
+  "NAT-M01-X4-01",
+  "NAT-M02-X1-04",
+  "NAT-M02-X6-03",
+  "NAT-M02-H1-02",
+  "NAT-M02-Y5-04",
+  "NAT-M02-X3-03",
+  "NAT-M02-Y5-03",
+  "NAT-M02-X6-01",
+  "NAT-M02-Z1-01",
+  "NAT-M02-X5-03",
+  "NAT-M02-X5-04",
+  "NAT-M02-X4-03",
+  "NAT-M02-Y4-04"
+ ],
+ "rows": [
+  {
+   "id": "NAT-M01-N0-02",
+   "persona": "M01",
+   "cutoff_turn": 409,
+   "canary_turn": 410,
+   "leaked_nonces": [
+    "CANARY-8befb394",
+    "CANARY-61b6ca33"
+   ],
+   "turns_after_cutoff": [
+    410,
+    623,
+    636,
+    672,
+    919,
+    943,
+    2627,
+    2661,
+    2681
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M01-X1-06",
+   "persona": "M01",
+   "cutoff_turn": 635,
+   "canary_turn": 636,
+   "leaked_nonces": [
+    "CANARY-8befb394"
+   ],
+   "turns_after_cutoff": [
+    636,
+    690,
+    932,
+    1044,
+    1404,
+    1851,
+    2330,
+    2661
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M01-X2-06",
+   "persona": "M01",
+   "cutoff_turn": 1160,
+   "canary_turn": 1161,
+   "leaked_nonces": [
+    "CANARY-a3675290"
+   ],
+   "turns_after_cutoff": [
+    1161,
+    1433,
+    1696,
+    2161,
+    2468,
+    2493,
+    2718
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M01-X2-02",
+   "persona": "M01",
+   "cutoff_turn": 1163,
+   "canary_turn": 1164,
+   "leaked_nonces": [
+    "CANARY-49ee94b1"
+   ],
+   "turns_after_cutoff": [
+    1164,
+    1274,
+    1353,
+    1576,
+    1640,
+    2252,
+    2559,
+    2909
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M01-X6-02",
+   "persona": "M01",
+   "cutoff_turn": 1287,
+   "canary_turn": 1288,
+   "leaked_nonces": [
+    "CANARY-6e6431e0"
+   ],
+   "turns_after_cutoff": [
+    1288,
+    1704,
+    2995
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M01-Y1-04",
+   "persona": "M01",
+   "cutoff_turn": 1337,
+   "canary_turn": 1338,
+   "leaked_nonces": [
+    "CANARY-736c8d08"
+   ],
+   "turns_after_cutoff": [
+    1338,
+    1850,
+    1975,
+    2372,
+    2727,
+    2934
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M01-X2-05",
+   "persona": "M01",
+   "cutoff_turn": 1514,
+   "canary_turn": 1515,
+   "leaked_nonces": [
+    "CANARY-13156330"
+   ],
+   "turns_after_cutoff": [
+    1515,
+    1845,
+    2068,
+    2108,
+    2599
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M01-Z1-01",
+   "persona": "M01",
+   "cutoff_turn": 1556,
+   "canary_turn": 1557,
+   "leaked_nonces": [
+    "CANARY-c8e88528"
+   ],
+   "turns_after_cutoff": [
+    1557,
+    2978
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M01-X1-02",
+   "persona": "M01",
+   "cutoff_turn": 1608,
+   "canary_turn": 1609,
+   "leaked_nonces": [
+    "CANARY-a8a0571a"
+   ],
+   "turns_after_cutoff": [
+    1609,
+    1630,
+    2298,
+    2317
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M01-X1-05",
+   "persona": "M01",
+   "cutoff_turn": 1887,
+   "canary_turn": 1888,
+   "leaked_nonces": [
+    "CANARY-1ae086c0"
+   ],
+   "turns_after_cutoff": [
+    1888,
+    2010,
+    2297,
+    2636
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M01-X1-09",
+   "persona": "M01",
+   "cutoff_turn": 2071,
+   "canary_turn": 2072,
+   "leaked_nonces": [
+    "CANARY-4d144f50"
+   ],
+   "turns_after_cutoff": [
+    2072,
+    2714,
+    2880
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M01-X4-01",
+   "persona": "M01",
+   "cutoff_turn": 2703,
+   "canary_turn": 2704,
+   "leaked_nonces": [
+    "CANARY-2c098928"
+   ],
+   "turns_after_cutoff": [
+    2704,
+    2835
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-X1-04",
+   "persona": "M02",
+   "cutoff_turn": 1143,
+   "canary_turn": 1144,
+   "leaked_nonces": [
+    "CANARY-8fe092be"
+   ],
+   "turns_after_cutoff": [
+    1144,
+    1383,
+    1580,
+    2059,
+    2101
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-X6-03",
+   "persona": "M02",
+   "cutoff_turn": 1213,
+   "canary_turn": 1214,
+   "leaked_nonces": [
+    "CANARY-7e31979b",
+    "CANARY-e8ea0763"
+   ],
+   "turns_after_cutoff": [
+    1214,
+    1487,
+    1735,
+    1978
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-H1-02",
+   "persona": "M02",
+   "cutoff_turn": 1339,
+   "canary_turn": 1340,
+   "leaked_nonces": [
+    "CANARY-b73491d4"
+   ],
+   "turns_after_cutoff": [
+    1340,
+    1550
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-Y5-04",
+   "persona": "M02",
+   "cutoff_turn": 1455,
+   "canary_turn": 1456,
+   "leaked_nonces": [
+    "CANARY-502efd47"
+   ],
+   "turns_after_cutoff": [
+    1456,
+    1891,
+    1941,
+    2376
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-X3-03",
+   "persona": "M02",
+   "cutoff_turn": 1486,
+   "canary_turn": 1487,
+   "leaked_nonces": [
+    "CANARY-7e31979b"
+   ],
+   "turns_after_cutoff": [
+    1487,
+    1942,
+    2500
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-Y5-03",
+   "persona": "M02",
+   "cutoff_turn": 1532,
+   "canary_turn": 1533,
+   "leaked_nonces": [
+    "CANARY-3b9bbd85"
+   ],
+   "turns_after_cutoff": [
+    1533,
+    1596,
+    2097
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-X6-01",
+   "persona": "M02",
+   "cutoff_turn": 1535,
+   "canary_turn": 1536,
+   "leaked_nonces": [
+    "CANARY-c616f069"
+   ],
+   "turns_after_cutoff": [
+    1536,
+    1575,
+    2071,
+    2483
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-Z1-01",
+   "persona": "M02",
+   "cutoff_turn": 1584,
+   "canary_turn": 1585,
+   "leaked_nonces": [
+    "CANARY-a7b82a55"
+   ],
+   "turns_after_cutoff": [
+    1585,
+    1619,
+    1810
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-X5-03",
+   "persona": "M02",
+   "cutoff_turn": 1948,
+   "canary_turn": 1949,
+   "leaked_nonces": [
+    "CANARY-259de20d"
+   ],
+   "turns_after_cutoff": [
+    1949,
+    2124,
+    2127,
+    2301
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-X5-04",
+   "persona": "M02",
+   "cutoff_turn": 1949,
+   "canary_turn": 1950,
+   "leaked_nonces": [
+    "CANARY-efd29d98"
+   ],
+   "turns_after_cutoff": [
+    1950,
+    2289,
+    2362,
+    2483
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-X4-03",
+   "persona": "M02",
+   "cutoff_turn": 2324,
+   "canary_turn": 2325,
+   "leaked_nonces": [
+    "CANARY-a8a0841f"
+   ],
+   "turns_after_cutoff": [
+    2325,
+    2458
+   ],
+   "own_canary_leaked": true
+  },
+  {
+   "id": "NAT-M02-Y4-04",
+   "persona": "M02",
+   "cutoff_turn": 2423,
+   "canary_turn": 2424,
+   "leaked_nonces": [
+    "CANARY-b4e62163"
+   ],
+   "turns_after_cutoff": [
+    2424
+   ],
+   "own_canary_leaked": true
+  }
+ ]
+}

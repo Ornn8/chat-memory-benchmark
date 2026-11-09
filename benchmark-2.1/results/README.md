@@ -1,4 +1,5 @@
 # 2.1 榜单与成绩
+n> 自然用记忆榜（第三个榜）的结果在 [../natural/results/](../natural/results/README.md)，三榜加权总排名在 `natural/results/leaderboard-three-boards.md`。
 
 价目表 prices-2.1.1；综合分系数 {'cost_coef': 3.0, 'cost_floor_ratio': 0.25}；判分与答题模型 DeepSeek V4.1 flash（温度 0，关闭思考）；判分提示词 SHA 前缀 184a825f。
 Qwen（qwen-base / r3）为实时检索（run R21，百炼向量与重排经网关计量）；基线为 R21 / R21c。局限见第 5 节。
