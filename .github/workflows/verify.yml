@@ -18,6 +18,10 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.10'
+      # Bench 2.1 的 harness 依赖 numpy；上游在 05f4e9f 之后 ubuntu 任务因缺它失败，
+      # 这里补上这一条依赖，让离线校验在两种 runner 上都能跑完。
+      - name: Install 2.1 harness test dependency
+        run: python -m pip install --disable-pip-version-check --quiet numpy
       - name: Validate exam input boundaries
         run: python demo/read_exam.py --verify-all
       - name: Check dataset integrity and isolation
