@@ -41,9 +41,9 @@
 ## 怎么跑
 
 ```bash
-python -m bench21.natural run       --release ../dataset --natural dataset --system r3 --split dev --run mine
-python -m bench21.natural judge     --release ../dataset --natural dataset --system r3 --split dev --run mine
-python -m bench21.natural summarize --release ../dataset --natural dataset --system r3 --split dev --run mine
+python -m bench21.natural run       --release ../dataset --natural dataset --system qwen-base --split dev --run mine
+python -m bench21.natural judge     --release ../dataset --natural dataset --system qwen-base --split dev --run mine
+python -m bench21.natural summarize --release ../dataset --natural dataset --system qwen-base --split dev --run mine
 python -m bench21.natural_report --lb21 ../results/leaderboard-sealed.json --run mine --out out/
 ```
 

@@ -6,8 +6,8 @@ in the tail are fixed) or a 4-turn scripted conversation whose assistant replies
 (tier B).  Every system sees the same user turns.  The evaluator feeds history turn by turn up to the cutoff, then the tail,
 asks the system for the memory text, builds the answer prompt, calls flash for the reply and rewinds the system.
 
-    python -m bench21.natural run   --release R21DIR --natural NATDIR --system r3 --split sealed --run NR1
-    python -m bench21.natural judge --release R21DIR --natural NATDIR --system r3 --split sealed --run NR1
+    python -m bench21.natural run   --release R21DIR --natural NATDIR --system qwen-base --split sealed --run NR1
+    python -m bench21.natural judge --release R21DIR --natural NATDIR --system qwen-base --split sealed --run NR1
     python -m bench21.natural summarize ...
 """
 import argparse

@@ -4,7 +4,7 @@
 
 ## 1. 与 Sonnet 判决的一致性（校准）
 
-拿 2026-11-05 终测里 Haiku 作答的 704 个答案（qwen-base 和 r3 各 352 个主题题；当时由 Claude Sonnet 盲评），用 flash 判分员重判，和当时 Sonnet 的判决比较。
+拿 2026-11-05 终测里 Haiku 作答的 704 个答案（我们的 Qwen 方案的两套配置各 352 个主题题；当时由 Claude Sonnet 盲评），用 flash 判分员重判，和当时 Sonnet 的判决比较。
 
 | 判分提示词 | 题数 | 一致率 | Cohen κ | flash 通过率 | Sonnet 通过率 | flash 过而 Sonnet 不过 | flash 不过而 Sonnet 过 |
 |---|---:|---:|---:|---:|---:|---:|---:|

@@ -5,7 +5,7 @@
 ```text
 bench21/
   gateway.py      计量网关：持有供应商密钥，按 prices.json 给每次调用计价，账本写 runs/bench21/spend-ledger.jsonl
-  systems.py      适配器接口 + 参考系统（qwen-base、r3、none、recent6、bm25-recent6、full-context）
+  systems.py      适配器接口 + 参考系统（qwen-base、none、recent6、bm25-recent6、full-context）
   runner.py       评测程序：按截止轮喂历史、检索、答题、判分、汇总；--sentinel 跑泄漏哨兵
   natural.py      自然用记忆榜：run / judge / confirm / summarize（尾巴、回退、多轮现场生成、判分、子分）
   natural_report.py  三榜榜单与加权综合分、资格底线

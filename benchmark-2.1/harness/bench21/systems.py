@@ -29,7 +29,6 @@ import numpy as np
 EMBED_MODEL = "qwen3.7-text-embedding"
 RERANK_MODEL = "qwen3.7-text-rerank"
 POOL, TOP_K, RECENT, RRF_K = 40, 10, 6, 60
-WEEKDAYS = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
 
 
 class Retrieval:
@@ -105,88 +104,15 @@ class System:
 
 # ---------------------------------------------------------------- presentation
 SYS_BASE = "你是用户长期聊天的伴侣，下面是你们过去的聊天片段和最近的对话，请根据记忆自然地回答用户这句话。"
-SYS_R3 = "\n".join([
-    "你是用户长期聊天的伴侣。下面是你们过去的聊天片段（每段标有当时的日期）和最近的对话，请根据记忆自然地回答用户这句话。",
-    "记忆使用原则：",
-    "- 记忆里每段前面标了日期、星期和离现在多久；话里的今天/明天/昨天等后面〔=…〕是已经换算好的日期，直接使用。其他相对说法（下周三、周末、26号等）请对照日历，按那句话说出的日期换算；拿不准时说出原话和你的理解。",
-    "- 计划和约定只代表当时的打算；之后没有提到结果的，就说不知道后来怎样，不要当作已经发生或没发生。",
-    "- 用户明确改口（说了“改成…”“其实是…”“不…了”）的，以改口后的为准。",
-    "- 前后说法不一致又没有解释的，说明有两种说法，不替对方下结论，也不猜原因或动机。",
-    "- 你自己以前说过的推测或建议，不等于用户确认的事实。",
-    "- 记忆里没有的细节不要补，直接说不记得或问一句。",
-])
-RELDAY = {"大前天": -3, "前天": -2, "昨天": -1, "昨晚": -1, "今天": 0, "今晚": 0, "今早": 0,
-          "明天": 1, "明晚": 1, "明早": 1, "后天": 2, "大后天": 3}
-DATE_RE = re.compile("|".join(sorted(RELDAY, key=len, reverse=True)))
-
-
-def stamp(s):
-    dt = datetime.datetime.fromisoformat(s)
-    return f"{dt:%Y-%m-%d} {WEEKDAYS[dt.weekday()]} {dt:%H:%M}"
-
-
-def calendar_lines(now):
-    dt = datetime.datetime.fromisoformat(now).date()
-    monday = dt - datetime.timedelta(days=dt.weekday())
-    lines = []
-    for back in range(7, -1, -1):
-        start = monday - datetime.timedelta(weeks=back)
-        days = [start + datetime.timedelta(days=k) for k in range(7)]
-        lines.append("  ".join(f"{d:%m-%d}{WEEKDAYS[k]}" for k, d in enumerate(days)))
-    return lines
-
-
-def turn_day(time_iso):
-    dt = datetime.datetime.fromisoformat(time_iso)
-    d = dt.date()
-    return d - datetime.timedelta(days=1) if dt.hour < 5 else d
-
-
-def annotate(text, d):
-    def rep(m):
-        x = d + datetime.timedelta(days=RELDAY[m.group(0)])
-        return m.group(0) + f"〔={x.month}/{x.day}{WEEKDAYS[x.weekday()]}〕"
-    return DATE_RE.sub(rep, text)
-
-
-def age_label(td, qd):
-    delta = (qd - td).days
-    if delta < 0:
-        raise ValueError("turn after question")
-    if delta == 0:
-        return "今天"
-    if delta == 1:
-        return "昨天"
-    if delta == 2:
-        return "前天"
-    if delta <= 13:
-        return f"{delta}天前"
-    if delta <= 56:
-        return f"{delta // 7}周前"
-    months = (qd.year - td.year) * 12 + (qd.month - td.month) - (1 if qd.day < td.day else 0)
-    return f"{max(1, months)}个月前"
-
-
-def fmt_r3(t, now):
-    td = datetime.datetime.fromisoformat(t["time"]).date()
-    qd = datetime.datetime.fromisoformat(now).date()
-    head = f"[{stamp(t['time'])} · {age_label(td, qd)}]"
-    rd = turn_day(t["time"])
-    return f"{head}\n用户：{annotate(t['user'], rd)}\n小满：{annotate(t['assistant'], rd)}"
 
 
 def fmt_base(t, now):
     return f"[{t['time']}]\n用户：{t['user']}\n小满：{t['assistant']}"
 
 
-def render(blocks, recent, now, style):
-    if style == "base":
-        parts = [SYS_BASE, "【过去的聊天片段】"] + [fmt_base(t, now) for t in blocks]
-        parts += ["【最近的对话】"] + [fmt_base(t, now) for t in recent]
-        return "\n\n".join(parts)
-    header = [f"现在是 {stamp(now)}", "最近8周日历（每行一周，周一在前）："] + calendar_lines(now)
-    parts = [SYS_R3, "\n".join(header), "【过去的聊天片段】"] + [fmt_r3(t, now) for t in blocks]
-    parts += ["【最近的对话】"] + [fmt_r3(t, now) for t in recent]
+def render(blocks, recent, now, style="base"):
+    parts = [SYS_BASE, "【过去的聊天片段】"] + [fmt_base(t, now) for t in blocks]
+    parts += ["【最近的对话】"] + [fmt_base(t, now) for t in recent]
     return "\n\n".join(parts)
 
 
@@ -260,14 +186,14 @@ def doc_text(t):
 
 # ---------------------------------------------------------------- Qwen RAG
 class QwenRag(System):
-    """qwen-base / r3: exchange chunks -> Qwen3.7 embeddings + BM25 (RRF, pool 40) -> Qwen3.7 rerank top 10
-    + last 6 turns.  style 'base' or 'r3' only changes how the retrieved text is presented.
+    """qwen-base: exchange chunks -> Qwen3.7 embeddings + BM25 (RRF, pool 40) -> Qwen3.7 rerank top 10
+    + last 6 turns.
     leaky=True is the POSITIVE CONTROL used by the sentinel test: it is handed future turns on purpose
     (ingest of any turn, including ones past the cutoff) and does no cutoff filtering."""
 
     def __init__(self, gw, style="base", leaky=False):
         self.gw, self.style, self.leaky = gw, style, leaky
-        self.name = "qwen-" + style if style == "base" else "r3"
+        self.name = "qwen-" + style
         self.turns, self.vecs, self.pending = [], [], []
         self.bm = IncBM25()
 
@@ -463,7 +389,6 @@ class AlwaysRecall(Bm25Local):
 
 REGISTRY = {
     "qwen-base": lambda gw: QwenRag(gw, "base"),
-    "r3": lambda gw: QwenRag(gw, "r3"),
     "none": lambda gw: NoHistory(),
     "recent6": lambda gw: RecentN(6),
     "full-context": lambda gw: FullContext(),

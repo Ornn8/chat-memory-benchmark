@@ -29,8 +29,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--lb21", required=True)
     ap.add_argument("--run", required=True)
-    ap.add_argument("--systems", default="r3,qwen-base,full-context,bm25-recent6,recent6,none,never-recall,always-recall")
-    ap.add_argument("--ref", default="r3")
+    ap.add_argument("--systems", default="qwen-base,full-context,bm25-recent6,recent6,none,never-recall,always-recall")
+    ap.add_argument("--ref", default="qwen-base")
     ap.add_argument("--out", required=True)
     ap.add_argument("--runs-for", default="", help="system@run overrides, comma list")
     a = ap.parse_args()
@@ -66,7 +66,7 @@ def main():
            "prices_version": json.load(open(os.path.join(ROOT, "bench21", "prices.json"), encoding="utf-8"))["version"], "rows": rows}
     json.dump(out, open(os.path.join(a.out, "leaderboard-three-boards.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     L = [f"# 三榜榜单（封存集；短对话榜 / 长对话榜来自 2.1 榜单，自然用记忆榜 run {a.run}）", "",
-         f"综合分 = {W['short']} × S短 + {W['long']} × S长 + {W['natural']} × S自然；自然用记忆榜 C_ref = r3 的 C = ¥{c_ref:.3f}。", "",
+         f"综合分 = {W['short']} × S短 + {W['long']} × S长 + {W['natural']} × S自然；自然用记忆榜 C_ref = {a.ref} 的 C = ¥{c_ref:.3f}。", "",
          "## 总排名（三榜都有成绩的系统）", "", "| 系统 | 综合 S | 综合 A | 短 A/C/S | 长 A/C/S | 自然 A/C/S | 达标底线(克制≥70%且编造≤5%) |", "|---|---:|---:|---|---|---|---|"]
     f3 = lambda b: "-" if not b else f"{b['A']:.1f} / {b['C']:.3f} / {b['S']:.1f}"
     for s, r in sorted(rows.items(), key=lambda kv: -kv[1].get("composite_S", -1e9)):
