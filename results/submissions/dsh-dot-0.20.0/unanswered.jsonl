@@ -1,0 +1,5 @@
+{"id":"P14-CASE-batch-coffee/d00","reason":"作答请求重试 8 次后放弃：DeepSeek API HTTP 500"}
+{"id":"P16-CASE-batch-sister_boundary/d00","reason":"作答请求重试 8 次后放弃：DeepSeek API HTTP 500"}
+{"id":"P17-CASE-002/d00","reason":"作答请求重试 8 次后放弃：DeepSeek API HTTP 500"}
+{"id":"P20-CASE-004/d00","reason":"作答请求重试 8 次后放弃：DeepSeek API 无响应体的错误（同一时段的 500/503 与超时）"}
+{"id":"P20-CASE-003/d03","reason":"作答请求重试 8 次后放弃：DeepSeek API HTTP 500"}
