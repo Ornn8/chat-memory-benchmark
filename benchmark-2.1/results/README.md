@@ -2,7 +2,7 @@
 
 > 自然用记忆榜（第三个榜）的结果在 [../natural/results/](../natural/results/README.md)，三榜加权总排名在 `natural/results/leaderboard-three-boards.md`。
 
-> 2026-11-11 更正：参考系统已由 r3 改为 Qwen base。下面所有表都用同一批判决重新生成，C_ref = Qwen base 的成本；r3 已从公开材料中撤回。
+> 2026-11-11 更正：参考系统改为 Qwen 基础方案。下面所有表都用同一批判决重新生成，C_ref = Qwen 基础方案的成本；表里另一个自家配置的行已撤下。
 
 价目表 prices-2.1.1；综合分系数 {'cost_coef': 3.0, 'cost_floor_ratio': 0.25}；判分与答题模型 DeepSeek V4.1 flash（温度 0，关闭思考）；判分提示词 SHA 前缀 184a825f。
 Qwen（qwen-base）为实时检索（run R21，百炼向量与重排经网关计量）；基线为 R21 / R21c。局限见第 5 节。
