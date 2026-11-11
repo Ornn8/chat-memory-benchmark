@@ -16,6 +16,7 @@
 | Suzu 原生重测 | eryucheng | [eryucheng/dsh-suzu-memory](https://github.com/eryucheng/dsh-suzu-memory)，使用 Suzu core `645c862470b1a207c9904e614083f8b77a8f15bf` |
 | Suzu 强制原生检索重测 | eryucheng | [eryucheng/dsh-suzu-memory](https://github.com/eryucheng/dsh-suzu-memory)，同一 Suzu core `645c862470b1a207c9904e614083f8b77a8f15bf` |
 | Hindsight 1.2.0 | Vectorize | [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) · [`34a1386`](https://github.com/vectorize-io/hindsight/tree/34a138684a899b6ec34175f7a2b633860466d289) |
+| PMem 0.41.0 | dnciyun | [dnciyun/dsh-PMem](https://github.com/dnciyun/dsh-PMem) · [`baseline-618`](https://github.com/dnciyun/dsh-PMem/tree/baseline-618) |
 | Qwen RAG | 本评测搭建的对照 | Qwen 嵌入、重排，加统一作答模型；不是另一个社区记忆项目 |
 
 作者署名按提交测试时提供的信息记录。仓库仅链接上游，不包含其代码或表示其背书。
@@ -123,6 +124,21 @@
 引擎按生产版本快照运行（逐文件 SHA-256 见作者侧清单；为对齐考试时间基线有一处已声明的时间读取适配）。既有对话逐轮回放，每个逻辑日跑一次原生维护（衰减/裁剪/压实/主题归纳）；每题以问题原文强制调用原生检索 topN=10（同 Suzu 强制检索口径），另带最近六个完整回合，交给统一作答模型 glm-5.3-flash（OpenAI 兼容端点）；向量 BAAI/bge-m3（1024 维），每聊天一个独立 JSONL 图谱库。
 
 判卷为提交方自判：`judge-prompt.md` 原文 + glm-5.3-flash 单票，`grade.py` 校验与汇总；未做人工抽查；判卷与作答同模型，未与 Codex 判卷对齐。本次关闭记忆衰减删除（minImportance=0）：此前试跑中，5 个月模拟跨度下旧记忆被衰减删除导致大面积零召回，本卷为修复后口径。结果见[作者侧自测报告](../results/submissions/dsh-plugin-memory-graph-2026-11-07/README.md)。
+## PMem 0.41.0
+
+按时间戳逐轮回放六个合成人物的历史，每个考试节点使用该节点前的独立快照（考题和答案不写回历史）。
+考试时同时注入四块材料：醒来卡与常驻三栏笔记（关于你 / 关于我 / 还没了的事，由宿主在考试节点前
+按截止时间的状态离线整理）、检索结果（k=40、预算 2400 token，时间类问题由产品自带收敛收窄到 k=8 / 600）、
+原话通道（从 journal 原话按字面覆盖 + 时间衰减补最多 8 条）、最近六轮对话（带日期）。
+
+作答模型 `deepseek-v4.1-flash`（effort=low、temperature=0.2），随后同一模型对答案做一次自检改写
+（714 题中 266 题被改写）；判卷模型 `deepseek-v4.1-flash`（effort=high、temperature=0.2），
+使用本仓库 `grading/` 工具逐题按本题证据包判分。
+
+三栏笔记与原话通道两个增强模块默认关闭，本轮通过配置打开；同版本关闭这两个模块时做同题对照。
+714 题初判通过 **618 / 714**（86.6%）；关闭增强的对照为 **583 / 713**（1 题没取到判分）。
+两臂配对 713 题：只增强臂过 71 题、只对照臂过 36 题，净 +35（McNemar p=0.0009）。
+逐题回答、判分与配置见[投稿材料](../results/submissions/pmem-0.41.0-2026-11-09/README.md)。
 
 ## 早期还跑过的诊断对照
 
