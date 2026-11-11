@@ -103,7 +103,7 @@ def pick_sample(items, n, seed):
 def run_persona(args, release, hist, persona, items, outdir, gw, sample_ids):
     sysname = args.system
     system = REGISTRY[sysname](gw)
-    todo = sorted([i for i in items if i["persona"] == persona], key=lambda x: (x["cutoff_turn"], x["id"]))
+    todo = sorted([i for i in items if i["persona"] == persona and (sample_ids is None or i["id"] in sample_ids)], key=lambda x: (x["cutoff_turn"], x["id"]))   # with --sample only the sampled questions are retrieved (and billed)
     ctx_path = os.path.join(outdir, "contexts.jsonl")
     done_ctx = {r["id"] for r in jl(ctx_path)} if os.path.exists(ctx_path) else set()
     pos, turns = 0, hist[persona]

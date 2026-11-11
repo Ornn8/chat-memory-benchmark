@@ -224,7 +224,16 @@ class QwenRag(System):
         if not pend:
             return
         self.vecs.extend([None] * (len(self.turns) - len(self.vecs)))
-        batches = [pend[i:i + 10] for i in range(0, len(pend), 10)]
+        # canonical batches: complete blocks of 10 turns aligned to multiples of 10 (so every run and every
+        # split asks the embedding service the same questions and shares the cache); a block that is not yet
+        # complete at the cutoff is embedded as it stands.  Only turns already ingested are ever sent.
+        n_now, pset = len(self.turns), set(pend)
+        batches = []
+        for b in sorted({i // 10 for i in pend}):
+            if 10 * b + 10 <= n_now:
+                batches.append(list(range(10 * b, 10 * b + 10)))
+            else:
+                batches.append([i for i in range(10 * b, n_now) if i in pset])
         from concurrent.futures import ThreadPoolExecutor
 
         def one(b):

@@ -148,7 +148,10 @@ def main():
              "recall": met["recall_rate"], "restraint": met["restraint_rate"], "fabrication": met["fabrication_rate"], "hedge": met["hedge_pass_rate"],
              "naturalness": met["naturalness_mean"], "x_diagnostics": met.get("x_diagnostics"), "n_items": met["n_items"], "draws": met.get("A_nat_draws")}
         if nref:
-            d["S"] = scoring.composite(met["A_nat"], c, nref["cost_cny"]["total_C"])
+            nref_c = nref["cost_cny"]["total_C"]
+            if n_full and nref["metrics"]["n_items"] < 0.9 * n_full:
+                nref_c = nref_c * n_full / nref["metrics"]["n_items"]      # sampled reference: C for the whole natural set
+            d["S"] = scoring.composite(met["A_nat"], c, nref_c)
             d["S_shift"] = d["S"] - met["A_nat"]
             d["S_ci"] = None if not d["ci"] else [d["ci"][0] + d["S_shift"], d["ci"][1] + d["S_shift"]]
         d["floor_ok"] = met["restraint_rate"] >= FLOOR_RESTRAINT and met["fabrication_rate"] <= FLOOR_FAB

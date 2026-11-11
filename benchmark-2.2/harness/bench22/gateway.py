@@ -82,6 +82,8 @@ class Ledger:
 class Cache:
     def __init__(self, path):
         self.db = sqlite3.connect(path, check_same_thread=False, timeout=60)
+        self.db.execute("pragma journal_mode=wal")
+        self.db.execute("pragma synchronous=off")          # the cache only saves money; losing a few rows in a crash costs a re-call
         self.db.execute("create table if not exists c (k text primary key, v text not null)")
         self.lock = threading.Lock()
 
