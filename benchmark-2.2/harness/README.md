@@ -4,7 +4,7 @@
 
 ```text
 bench22/
-  gateway.py      计量网关：持有供应商密钥，按 prices.json 给每次调用计价；参赛系统自己的调用累计到成本上限（score_config.json: entry_cost_ceiling_cny，默认 ¥50），超过即 403 ENTRY_COST_CEILING，运行停止、无成绩
+  gateway.py      计量网关：持有供应商密钥，按 prices.json 给每次调用计价；一次运行的全部调用（系统自己的 + 答题 + 判分）按价目表累计，到 run_cost_ceiling_cny（score_config.json，默认 ¥50）即 403 RUN_COST_CEILING，运行停止、无成绩
   systems.py      适配器接口 + 参考系统（qwen-base、none、recent6、bm25-recent6、full-context、vague，自然榜的极端基线 never-recall / always-recall）
   runner.py       评测程序：按截止轮喂历史、检索、答题、判分、汇总（日常分 D、长期分 L、A、聚类 bootstrap 区间）；--sentinel 跑泄漏哨兵
   natural.py      自然用记忆榜：run / judge / confirm / summarize（尾巴、回退、多轮现场生成、判分、子分、区间、X 诊断）；--sample N 只跑按类比例抽样的 N 题
@@ -38,7 +38,7 @@ class MySystem(System):
 
 ## 成本上限
 
-参赛系统自己的模型用量（写入 + 检索 + 内部对话调用）按价目表累计，一次封存跑最多 ¥50。网关用评测程序独有的令牌区分评测程序自己的答题 / 判分调用（不计入上限）和参赛系统的调用（计入，不管它在请求头里自称什么阶段）：网关和评测程序进程设环境变量 `BENCH22_EVAL_TOKEN`，参赛系统运行在没有这个变量的环境里。上限的累计按账本重建，重启网关不会清零。测试：`tests/test_bench22.py`。
+一次运行的总费用（你的系统的写入 / 检索 / 内部对话调用，加上评测程序的答题和判分，全部按价目表）累计到 ¥50 就停止，这次运行没有成绩，押金不退、也不再多收。上限的累计按账本重建，重启网关不会清零。网关用评测程序独有的令牌区分评测程序自己的调用和参赛系统的调用（账单分三项列出：系统 / 答题 / 判分）：网关和评测程序进程设环境变量 `BENCH22_EVAL_TOKEN`，参赛系统运行在没有这个变量的环境里。测试：`tests/test_bench22.py`。
 
 ## 网关
 

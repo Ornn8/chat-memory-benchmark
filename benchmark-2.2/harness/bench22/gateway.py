@@ -20,9 +20,9 @@ Routes (OpenAI-like):
 Request headers used for accounting: X-Bench-Run, X-Bench-System, X-Bench-Phase, X-Bench-Tag.
 Phases: ingest | retrieve | answer | judge | gen | review.
 Keys are read here only and never written to any file or log.
-Entry cost ceiling: calls that do not carry the evaluator token (env BENCH22_EVAL_TOKEN, set on the gateway and on the
-evaluator process only) count toward the entry's own cost; once an entry has spent `entry_cost_ceiling_cny`
-(score_config.json, default 50) in a run the gateway answers 403 ENTRY_COST_CEILING and the runner stops that run with no score.
+Run cost ceiling: every metered call of a run (the system's own calls AND the evaluator's answering/judging) counts toward the run's
+total at the published price list; once the total reaches `run_cost_ceiling_cny` (score_config.json, default 50 = the deposit) the gateway
+answers 403 RUN_COST_CEILING, the runner stops that run with no score, and the deposit is kept, nothing more is owed.
 Run:  python -m bench22.gateway --port 18877 --cap-usd 9.5
 """
 import argparse
@@ -104,8 +104,8 @@ class State:
     cap_usd = 9.5
     keys = {}
     eval_token = os.environ.get("BENCH22_EVAL_TOKEN", "")      # held only by the evaluator process; entries never get it
-    entry_ceiling_cny = 50.0
-    entry_cost = None                                      # (run, system) -> metered CNY of the entry's own calls
+    run_ceiling_cny = 50.0
+    entry_cost = None                                      # (run, system) -> metered CNY of ALL calls of the run (the system's own + answering + judging)
     entry_lock = threading.Lock()
     sem = {"deepseek": threading.Semaphore(int(os.environ.get("BENCH22_DEEPSEEK_CONCURRENCY", "4"))), "dash": threading.Semaphore(int(os.environ.get("BENCH22_DASH_CONCURRENCY", "6")))}
 
@@ -199,7 +199,7 @@ SYSTEM_PHASES = ("ingest", "retrieve")
 def _load_ceiling():
     cp = os.path.join(HERE, "score_config.json")
     if os.path.exists(cp):
-        State.entry_ceiling_cny = float(json.load(open(cp, encoding="utf-8")).get("entry_cost_ceiling_cny", 50.0))
+        State.run_ceiling_cny = float(json.load(open(cp, encoding="utf-8")).get("run_cost_ceiling_cny", 50.0))
 
 
 _load_ceiling()
@@ -227,28 +227,24 @@ def _load_entry_cost():
                     r = json.loads(line)
                 except ValueError:
                     continue
-                if r.get("entry", r.get("phase") in SYSTEM_PHASES):
-                    k = (r.get("run", ""), (r.get("system", "") or "").split(":")[0])
-                    State.entry_cost[k] = State.entry_cost.get(k, 0.0) + r.get("cost_cny", 0.0)
+                k = (r.get("run", ""), (r.get("system", "") or "").split(":")[0])
+                State.entry_cost[k] = State.entry_cost.get(k, 0.0) + r.get("cost_cny", 0.0)
 
 
 def ceiling_exceeded(meta, token):
-    """True when this entry has already spent its ceiling in this run (the call is refused)."""
-    if not is_entry_call(meta, token):
-        return False
+    """True when this run (system + answering + judging, all metered) has already reached the ceiling: every further call of the run is refused."""
     with State.entry_lock:
         if State.entry_cost is None:
             _load_entry_cost()
-        return State.entry_cost.get(entry_key(meta), 0.0) >= State.entry_ceiling_cny
+        return State.entry_cost.get(entry_key(meta), 0.0) >= State.run_ceiling_cny
 
 
 def add_entry_cost(meta, token, cost):
-    if is_entry_call(meta, token):
-        with State.entry_lock:
-            if State.entry_cost is None:
-                _load_entry_cost()
-            k = entry_key(meta)
-            State.entry_cost[k] = State.entry_cost.get(k, 0.0) + cost
+    with State.entry_lock:
+        if State.entry_cost is None:
+            _load_entry_cost()
+        k = entry_key(meta)
+        State.entry_cost[k] = State.entry_cost.get(k, 0.0) + cost
 
 
 class H(BaseHTTPRequestHandler):
@@ -290,7 +286,7 @@ class H(BaseHTTPRequestHandler):
         token = self.headers.get("X-Bench-Eval-Token", "")
         self._token = token
         if ceiling_exceeded(meta, token):
-            return self._send(403, {"error": "entry cost ceiling reached (%s CNY): the run stops and gets no score" % State.entry_ceiling_cny, "code": "ENTRY_COST_CEILING"})
+            return self._send(403, {"error": "run cost ceiling reached (%s CNY in total): the run stops and gets no score (deposit kept, nothing more owed)" % State.run_ceiling_cny, "code": "RUN_COST_CEILING"})
         if State.ledger.real_usd >= State.cap_usd:
             return self._send(402, {"error": f"spend cap reached ({State.ledger.real_usd:.2f} >= {State.cap_usd} USD)"})
         try:
@@ -438,8 +434,8 @@ if __name__ == "__main__":
     ap.add_argument("--ledger", default=os.path.join(ROOT, "runs", "bench22", "spend-ledger.jsonl"))
     ap.add_argument("--cache", default=os.path.join(ROOT, "runs", "bench22", "gateway-cache.sqlite3"))
     ap.add_argument("--cap-usd", type=float, default=9.5)
-    ap.add_argument("--entry-ceiling-cny", type=float, default=None, help="override score_config entry_cost_ceiling_cny")
+    ap.add_argument("--run-ceiling-cny", type=float, default=None, help="override score_config run_cost_ceiling_cny")
     a = ap.parse_args()
-    if a.entry_ceiling_cny is not None:
-        State.entry_ceiling_cny = a.entry_ceiling_cny
+    if a.run_ceiling_cny is not None:
+        State.run_ceiling_cny = a.run_ceiling_cny
     serve(a.port, a.ledger, a.cache, a.cap_usd)

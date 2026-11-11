@@ -61,7 +61,7 @@ class Gateway:
             except urllib.error.HTTPError as e:
                 body_txt = e.read().decode('utf-8', 'replace')[:300]
                 last = f"HTTP {e.code}: {body_txt}"
-                if e.code == 403 and "ENTRY_COST_CEILING" in body_txt:
+                if e.code == 403 and "RUN_COST_CEILING" in body_txt:
                     raise CeilingExceeded(last)
                 if e.code in (402, 400, 404):
                     raise RuntimeError(last)

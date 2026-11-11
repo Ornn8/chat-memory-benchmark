@@ -5,7 +5,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        规则见 [benchmark-2.2/RULES.md](../blob/main/benchmark-2.2/RULES.md)。**这个表单是公开的**：不要填密钥、手机号、邮箱或任何个人隐私；联系方式写 GitHub 账号就够。
+        规则见 [benchmark-2.2/RULES.md](../blob/main/benchmark-2.2/RULES.md)。**这个表单是公开的**：不要填密钥、手机号、邮箱或任何个人隐私；联系方式写 GitHub 账号就够；收款方式报名后私下约定，不要写在这里。
+        **费用**：测试费用由参赛者自付。每次运行（开发集试跑、封存跑）之前先交 ¥50 押金，我们按公布的价目表结算这次运行的实际费用（你的系统 + 答题 + 判分），多退；总费用到 ¥50 就停止、成绩作废、不补交。
         时间（北京时间）：调试期 2026-11-12 至 2026-12-02；**冻结 2026-12-03 00:00**，之前提交冻结的 commit / tag 和模型清单；封存跑 2026-12-03 至 12-09，只跑一次；复核与公布目标 2026-12-12。
   - type: dropdown
     id: kind
@@ -66,6 +67,8 @@ body:
         - label: 我读过 RULES.md，系统开源在上面的固定 commit / tag 上，使用宽松许可证
           required: true
         - label: 所有模型调用都会走评测网关，不自带密钥直连供应商
+          required: true
+        - label: 我知道每次运行先交 ¥50 押金、按实际费用多退，总费用超过 ¥50 就停止、成绩作废、押金不退也不再多收
           required: true
         - label: 系统里没有针对 M01 / M02 两个人物的专用数据、专用提示词或写死的人名事实
           required: true

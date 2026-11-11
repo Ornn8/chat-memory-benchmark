@@ -89,7 +89,7 @@ class CeilingTests(unittest.TestCase):
         gateway.State.cache = gateway.Cache(os.path.join(self.tmp.name, "c.sqlite3"))
         gateway.State.cap_usd = 100.0
         gateway.State.entry_cost = None
-        gateway.State.entry_ceiling_cny = 1.0
+        gateway.State.run_ceiling_cny = 1.0
         gateway.State.eval_token = ""
         self.srv = ThreadingHTTPServer(("127.0.0.1", 0), gateway.H)
         self.srv.daemon_threads = True
@@ -112,27 +112,21 @@ class CeilingTests(unittest.TestCase):
         except urllib.error.HTTPError as e:
             return e.code, json.loads(e.read())
 
-    def test_entry_calls_stop_at_ceiling(self):
-        # 1 million flash input tokens = CNY 1.296 > ceiling 1.0
+    def test_run_stops_at_ceiling(self):
+        # 1 million flash input tokens = CNY 1.296 > ceiling 1.0; the run's total counts system calls AND answering/judging
         self.assertEqual(self.post("ingest", 500_000)[0], 200)         # 0.648
-        self.assertEqual(self.post("retrieve", 500_000)[0], 200)       # 1.296 total -> now over the ceiling
-        code, body = self.post("retrieve", 10)
-        self.assertEqual(code, 403)
-        self.assertEqual(body["code"], "ENTRY_COST_CEILING")
-        self.assertEqual(self.post("ingest", 10, system="other:M01:sealed")[0], 200)   # other entries unaffected
+        self.assertEqual(self.post("answer", 500_000)[0], 200)         # 1.296 total -> now over the ceiling
+        for phase in ("retrieve", "answer", "judge"):
+            code, body = self.post(phase, 10)
+            self.assertEqual(code, 403)
+            self.assertEqual(body["code"], "RUN_COST_CEILING")
+        self.assertEqual(self.post("ingest", 10, system="other:M01:sealed")[0], 200)   # other runs unaffected
 
-    def test_evaluator_calls_do_not_count_and_are_not_blocked(self):
-        for _ in range(5):
-            self.assertEqual(self.post("answer", 500_000)[0], 200)     # development mode: phase decides, answer is ours
-        self.assertEqual(self.post("ingest", 10)[0], 200)
-
-    def test_token_decides_when_configured(self):
+    def test_evaluator_calls_count_too(self):
         gateway.State.eval_token = "secret"
-        for _ in range(3):
-            self.assertEqual(self.post("answer", 500_000, token="secret")[0], 200)    # evaluator: free of the ceiling
-        self.assertEqual(self.post("answer", 700_000)[0], 200)         # no token, phase header claims 'answer': still the entry's
-        self.assertEqual(self.post("answer", 700_000)[0], 200)
-        self.assertEqual(self.post("answer", 10)[0], 403)
+        self.assertEqual(self.post("judge", 500_000, token="secret")[0], 200)
+        self.assertEqual(self.post("answer", 500_000, token="secret")[0], 200)
+        self.assertEqual(self.post("answer", 10, token="secret")[0], 403)      # the evaluator's own calls are billed to the run and stop at the ceiling too
 
     def test_ceiling_survives_restart(self):
         self.post("ingest", 800_000)

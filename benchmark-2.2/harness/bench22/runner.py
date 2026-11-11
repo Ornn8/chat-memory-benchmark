@@ -345,12 +345,12 @@ def main():
                 leaks += f.result()
         answer_and_judge(args, [i for i in items_all if i["persona"] in personas], outdir, gw, sample_ids)
     except CeilingExceeded as e:
-        json.dump({"system": args.system, "run": args.run, "split": args.split, "ceiling_cny": scoring.CONFIG.get("entry_cost_ceiling_cny"), "error": str(e)[:300], "result": "stopped, no score"},
+        json.dump({"system": args.system, "run": args.run, "split": args.split, "ceiling_cny": scoring.CONFIG.get("run_cost_ceiling_cny"), "error": str(e)[:300], "result": "stopped, no score"},
                   open(os.path.join(outdir, "CEILING-EXCEEDED.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         sp = os.path.join(outdir, "summary.json")
         if os.path.exists(sp):
             os.remove(sp)
-        log("ENTRY COST CEILING reached: run stopped, no score")
+        log("RUN COST CEILING reached: run stopped, no score (deposit kept, nothing more owed)")
         sys.exit(3)
     out = summarize(args, [i for i in items_all if i["persona"] in personas], outdir, args.release, args.run, sample_ids, items_all)
     log(json.dumps({p: {k: b[k] for k in ("A", "D_daily", "L_long", "A_interval95", "cost_cny")} for p, b in out["boards"].items()}, ensure_ascii=False))
