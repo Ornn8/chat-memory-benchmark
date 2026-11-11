@@ -1,0 +1,542 @@
+{
+ "run": "R22b",
+ "split": "dev",
+ "score_config": {
+  "cost_coef": 3.0,
+  "cost_floor_ratio": 0.25,
+  "reference_system": "qwen-base",
+  "board_weights": {
+   "short": 0.25,
+   "long": 0.25,
+   "natural": 0.5
+  },
+  "floor_restraint_pct": 70.0,
+  "floor_fabrication_pct": 5.0,
+  "entry_cost_ceiling_cny": 50.0,
+  "bootstrap_draws": 2000,
+  "daily_max_age_days": 1
+ },
+ "prices_version": "prices-2.2.0",
+ "reference_system": "qwen-base",
+ "boards": {
+  "M01": {
+   "board": "短对话榜",
+   "n_common_items": 122,
+   "C_ref": null,
+   "systems": {
+    "none": {
+     "n_units": 116,
+     "n_daily": 25,
+     "n_long": 91,
+     "n_pairs": 4,
+     "A": 1.2096774193548387,
+     "D": 0.0,
+     "L": 2.4193548387096775,
+     "A_traffic": 0.06114434876837816,
+     "pass_pct": 1.7241379310344827,
+     "ci": [
+      0.0,
+      3.0434782608695654
+     ],
+     "D_ci": [
+      0.0,
+      0.0
+     ],
+     "L_ci": [
+      0.0,
+      6.086956521739131
+     ],
+     "C": 0.0037276848000000005,
+     "C_parts": {
+      "ingest": 0.0,
+      "retrieve": 0.0,
+      "memory_in_prompt": 0.0037276848000000005
+     },
+     "by_type": {
+      "aggregate": {
+       "n": 1,
+       "pass_pct": 0.0
+      },
+      "date_key": {
+       "n": 2,
+       "pass_pct": 0.0
+      },
+      "due_day+no_due_control": {
+       "n": 1,
+       "pass_pct": 0.0
+      },
+      "implicit": {
+       "n": 8,
+       "pass_pct": 0.0
+      },
+      "legacy": {
+       "n": 97,
+       "pass_pct": 2.1
+      },
+      "premise_twin": {
+       "n": 2,
+       "pass_pct": 0.0
+      },
+      "regular": {
+       "n": 4,
+       "pass_pct": 0.0
+      },
+      "time_twin": {
+       "n": 1,
+       "pass_pct": 0.0
+      }
+     }
+    },
+    "recent6": {
+     "n_units": 116,
+     "n_daily": 25,
+     "n_long": 91,
+     "n_pairs": 4,
+     "A": 14.085094549499443,
+     "D": 24.137931034482758,
+     "L": 4.032258064516129,
+     "A_traffic": 18.05505270060538,
+     "pass_pct": 7.758620689655173,
+     "ci": [
+      5.672207640711578,
+      23.703703703703702
+     ],
+     "D_ci": [
+      7.407407407407407,
+      42.857142857142854
+     ],
+     "L_ci": [
+      0.0,
+      9.16030534351145
+     ],
+     "C": 0.0605382336,
+     "C_parts": {
+      "ingest": 0.0,
+      "retrieve": 0.0,
+      "memory_in_prompt": 0.0605382336
+     },
+     "by_type": {
+      "aggregate": {
+       "n": 1,
+       "pass_pct": 0.0
+      },
+      "date_key": {
+       "n": 2,
+       "pass_pct": 0.0
+      },
+      "due_day+no_due_control": {
+       "n": 1,
+       "pass_pct": 0.0
+      },
+      "implicit": {
+       "n": 8,
+       "pass_pct": 12.5
+      },
+      "legacy": {
+       "n": 97,
+       "pass_pct": 8.2
+      },
+      "premise_twin": {
+       "n": 2,
+       "pass_pct": 0.0
+      },
+      "regular": {
+       "n": 4,
+       "pass_pct": 0.0
+      },
+      "time_twin": {
+       "n": 1,
+       "pass_pct": 0.0
+      }
+     }
+    },
+    "bm25-recent6": {
+     "n_units": 116,
+     "n_daily": 25,
+     "n_long": 91,
+     "n_pairs": 4,
+     "A": 40.155728587319246,
+     "D": 44.827586206896555,
+     "L": 35.483870967741936,
+     "A_traffic": 41.85704122116534,
+     "pass_pct": 36.206896551724135,
+     "ci": [
+      28.22295805739514,
+      51.64277180406212
+     ],
+     "D_ci": [
+      24.137931034482758,
+      65.51724137931035
+     ],
+     "L_ci": [
+      24.166666666666668,
+      46.03174603174603
+     ],
+     "C": 0.1678738608,
+     "C_parts": {
+      "ingest": 0.0,
+      "retrieve": 0.0,
+      "memory_in_prompt": 0.1678738608
+     },
+     "by_type": {
+      "aggregate": {
+       "n": 1,
+       "pass_pct": 0.0
+      },
+      "date_key": {
+       "n": 2,
+       "pass_pct": 50.0
+      },
+      "due_day+no_due_control": {
+       "n": 1,
+       "pass_pct": 0.0
+      },
+      "implicit": {
+       "n": 8,
+       "pass_pct": 0.0
+      },
+      "legacy": {
+       "n": 97,
+       "pass_pct": 39.2
+      },
+      "premise_twin": {
+       "n": 2,
+       "pass_pct": 0.0
+      },
+      "regular": {
+       "n": 4,
+       "pass_pct": 75.0
+      },
+      "time_twin": {
+       "n": 1,
+       "pass_pct": 0.0
+      }
+     }
+    }
+   }
+  },
+  "M02": {
+   "board": "长对话榜",
+   "n_common_items": 87,
+   "C_ref": null,
+   "systems": {
+    "none": {
+     "n_units": 80,
+     "n_daily": 26,
+     "n_long": 54,
+     "n_pairs": 6,
+     "A": 0.0,
+     "D": 0.0,
+     "L": 0.0,
+     "A_traffic": 0.0,
+     "pass_pct": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "D_ci": [
+      0.0,
+      0.0
+     ],
+     "L_ci": [
+      0.0,
+      0.0
+     ],
+     "C": 0.0026683344,
+     "C_parts": {
+      "ingest": 0.0,
+      "retrieve": 0.0,
+      "memory_in_prompt": 0.0026683344
+     },
+     "by_type": {
+      "aggregate": {
+       "n": 2,
+       "pass_pct": 0.0
+      },
+      "due_day+no_due_control": {
+       "n": 4,
+       "pass_pct": 0.0
+      },
+      "implicit": {
+       "n": 18,
+       "pass_pct": 0.0
+      },
+      "legacy": {
+       "n": 49,
+       "pass_pct": 0.0
+      },
+      "premise_twin": {
+       "n": 2,
+       "pass_pct": 0.0
+      },
+      "regular": {
+       "n": 5,
+       "pass_pct": 0.0
+      }
+     }
+    },
+    "recent6": {
+     "n_units": 80,
+     "n_daily": 26,
+     "n_long": 54,
+     "n_pairs": 6,
+     "A": 7.352941176470588,
+     "D": 14.705882352941176,
+     "L": 0.0,
+     "A_traffic": 10.3984685767446,
+     "pass_pct": 5.0,
+     "ci": [
+      1.3888888888888888,
+      14.814814814814815
+     ],
+     "D_ci": [
+      2.7777777777777777,
+      29.62962962962963
+     ],
+     "L_ci": [
+      0.0,
+      0.0
+     ],
+     "C": 0.17578645920000002,
+     "C_parts": {
+      "ingest": 0.0,
+      "retrieve": 0.0,
+      "memory_in_prompt": 0.17578645920000002
+     },
+     "by_type": {
+      "aggregate": {
+       "n": 2,
+       "pass_pct": 0.0
+      },
+      "due_day+no_due_control": {
+       "n": 4,
+       "pass_pct": 0.0
+      },
+      "implicit": {
+       "n": 18,
+       "pass_pct": 16.7
+      },
+      "legacy": {
+       "n": 49,
+       "pass_pct": 0.0
+      },
+      "premise_twin": {
+       "n": 2,
+       "pass_pct": 0.0
+      },
+      "regular": {
+       "n": 5,
+       "pass_pct": 20.0
+      }
+     }
+    },
+    "bm25-recent6": {
+     "n_units": 80,
+     "n_daily": 26,
+     "n_long": 54,
+     "n_pairs": 6,
+     "A": 37.95822676896846,
+     "D": 38.23529411764706,
+     "L": 37.68115942028985,
+     "A_traffic": 41.11307490788418,
+     "pass_pct": 35.0,
+     "ci": [
+      26.984126984126984,
+      49.58592132505176
+     ],
+     "D_ci": [
+      18.91891891891892,
+      60.0
+     ],
+     "L_ci": [
+      22.972972972972972,
+      54.54545454545455
+     ],
+     "C": 0.5184571536,
+     "C_parts": {
+      "ingest": 0.0,
+      "retrieve": 0.0,
+      "memory_in_prompt": 0.5184571536
+     },
+     "by_type": {
+      "aggregate": {
+       "n": 2,
+       "pass_pct": 0.0
+      },
+      "due_day+no_due_control": {
+       "n": 4,
+       "pass_pct": 0.0
+      },
+      "implicit": {
+       "n": 18,
+       "pass_pct": 22.2
+      },
+      "legacy": {
+       "n": 49,
+       "pass_pct": 40.8
+      },
+      "premise_twin": {
+       "n": 2,
+       "pass_pct": 0.0
+      },
+      "regular": {
+       "n": 5,
+       "pass_pct": 80.0
+      }
+     }
+    }
+   }
+  }
+ },
+ "natural": {
+  "bm25-recent6": {
+   "sampled": false,
+   "n_probes_run": 96,
+   "A": 37.09048100505531,
+   "ci": [
+    23.28,
+    49.41
+   ],
+   "R": 23.2551724137931,
+   "P": 91.56666666666666,
+   "C": 0.5009,
+   "by_class": {
+    "Z": 100.0,
+    "H": 58.0,
+    "X": 14.6,
+    "Y": 89.3,
+    "N0": 90.0
+   },
+   "recall": 23.529411764705884,
+   "restraint": 88.05970149253731,
+   "fabrication": 3.3112582781456954,
+   "hedge": 60.0,
+   "naturalness": 2.0,
+   "x_diagnostics": {
+    "n_X": 36,
+    "needed_memory_reached_model_pct": 30.6,
+    "used_when_reached_pct": 54.5,
+    "used_when_not_reached_pct": 16.0,
+    "n_reached": 11,
+    "X4_due_day": {
+     "n": 14,
+     "reached_pct": 0.0
+    }
+   },
+   "n_items": 96,
+   "floor_ok": true
+  },
+  "none": {
+   "sampled": false,
+   "n_probes_run": 96,
+   "A": 29.593879033301164,
+   "ci": [
+    19.25,
+    40.06
+   ],
+   "R": 17.42528735632184,
+   "P": 98.1,
+   "C": 0.0046,
+   "by_class": {
+    "Z": 100.0,
+    "H": 73.3,
+    "X": 3.4,
+    "Y": 96.8,
+    "N0": 100.0
+   },
+   "recall": 1.9607843137254901,
+   "restraint": 97.01492537313433,
+   "fabrication": 1.3245033112582782,
+   "hedge": 60.0,
+   "naturalness": 2.0,
+   "x_diagnostics": {
+    "n_X": 36,
+    "needed_memory_reached_model_pct": 0.0,
+    "used_when_reached_pct": null,
+    "used_when_not_reached_pct": 2.8,
+    "n_reached": 0,
+    "X4_due_day": {
+     "n": 14,
+     "reached_pct": 0.0
+    }
+   },
+   "n_items": 96,
+   "floor_ok": true
+  },
+  "never-recall": {
+   "sampled": false,
+   "n_probes_run": 96,
+   "A": 27.825054423114977,
+   "ci": [
+    16.51,
+    38.65
+   ],
+   "R": 16.160919540229884,
+   "P": 100.0,
+   "C": 0.0311,
+   "by_class": {
+    "Z": 100.0,
+    "H": 66.7,
+    "X": 3.5,
+    "Y": 100.0,
+    "N0": 100.0
+   },
+   "recall": 3.9215686274509802,
+   "restraint": 100.0,
+   "fabrication": 1.3245033112582782,
+   "hedge": 60.0,
+   "naturalness": 1.9,
+   "x_diagnostics": {
+    "n_X": 36,
+    "needed_memory_reached_model_pct": 0.0,
+    "used_when_reached_pct": null,
+    "used_when_not_reached_pct": 5.6,
+    "n_reached": 0,
+    "X4_due_day": {
+     "n": 14,
+     "reached_pct": 0.0
+    }
+   },
+   "n_items": 96,
+   "floor_ok": true
+  },
+  "always-recall": {
+   "sampled": false,
+   "n_probes_run": 96,
+   "A": 33.9237974268646,
+   "ci": [
+    21.66,
+    43.84
+   ],
+   "R": 24.859770114942528,
+   "P": 53.39019607843136,
+   "C": 0.5074,
+   "by_class": {
+    "Z": 94.1,
+    "H": 45.3,
+    "X": 19.7,
+    "Y": 46.5,
+    "N0": 33.3
+   },
+   "recall": 25.49019607843137,
+   "restraint": 52.23880597014925,
+   "fabrication": 13.907284768211921,
+   "hedge": 33.333333333333336,
+   "naturalness": 1.972972972972973,
+   "x_diagnostics": {
+    "n_X": 36,
+    "needed_memory_reached_model_pct": 30.6,
+    "used_when_reached_pct": 63.6,
+    "used_when_not_reached_pct": 16.0,
+    "n_reached": 11,
+    "X4_due_day": {
+     "n": 14,
+     "reached_pct": 0.0
+    }
+   },
+   "n_items": 96,
+   "floor_ok": false
+  }
+ },
+ "composite": {}
+}

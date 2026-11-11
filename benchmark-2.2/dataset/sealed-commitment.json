@@ -1,0 +1,79 @@
+{
+ "version": "2.2",
+ "note": "Sealed questions are released when the round closes. These hashes fix the sealed set now; the next round uses newly written sealed questions.",
+ "sealed_exam_inputs_sha256": "bb13cde0cd5c65ee68b367695c07fac61033ab6e07d15c16a18d69832ec9cce1",
+ "sealed_answer_key_sha256": "55c6e5b15d23fca18ead9ea0348376a3e47ed1a207180d7c30cc85517cadc3f5",
+ "sealed_natural_probes_sha256": "d6e01113936b906728b8c9987018178c176a2e3d7f653d5743dbf89badd9cf57",
+ "sealed_natural_key_sha256": "fd39ab34eceb7f0e39ebad256c72c0af0fd3a3d32c0e04525c2c3dab65868825",
+ "full_release_exam_inputs_sha256": "ab8ad05cea298371b9618bff17f6bdd37ac45b952c6a3deef8bfb163ddf0aa8f",
+ "histories_sha256": {
+  "M01": "b120cfceeb440386467cc67a98e8184a159cafb39208dee3bbbec16e33bfe149",
+  "M02": "eacbd8e23d33e580ca4e7de67618207890be2c1c3a277939cea5ade691e0cb37"
+ },
+ "sealed_counts": {
+  "total": 2183,
+  "by_board": {
+   "M01": 1111,
+   "M02": 1072
+  },
+  "by_board_probe_kind": {
+   "M01|aggregate|main": 49,
+   "M01|condition_control|main": 9,
+   "M01|condition_twin|main": 4,
+   "M01|date_key|main": 47,
+   "M01|due_day|main": 61,
+   "M01|implicit|main": 399,
+   "M01|legacy|control": 12,
+   "M01|legacy|main": 173,
+   "M01|no_due_control|main": 60,
+   "M01|premise_twin|main": 84,
+   "M01|regular|main": 191,
+   "M01|time_twin|main": 22,
+   "M02|aggregate|main": 47,
+   "M02|condition_control|main": 7,
+   "M02|condition_twin|main": 6,
+   "M02|date_key|main": 36,
+   "M02|due_day|main": 57,
+   "M02|implicit|main": 394,
+   "M02|legacy|control": 13,
+   "M02|legacy|main": 174,
+   "M02|no_due_control|main": 55,
+   "M02|premise_twin|main": 80,
+   "M02|regular|main": 188,
+   "M02|time_twin|main": 15
+  }
+ },
+ "dev_counts": {
+  "total": 835,
+  "by_board": {
+   "M01": 436,
+   "M02": 399
+  }
+ },
+ "natural_counts": {
+  "sealed": 552,
+  "dev": 96,
+  "sealed_by_persona_class_tier": {
+   "M01|H|A": 30,
+   "M01|H|B": 1,
+   "M01|N0|A": 9,
+   "M01|N0|B": 10,
+   "M01|X|A": 90,
+   "M01|X|B": 39,
+   "M01|Y|A": 56,
+   "M01|Y|B": 19,
+   "M01|Z|A": 17,
+   "M01|Z|B": 4,
+   "M02|H|A": 28,
+   "M02|H|B": 1,
+   "M02|N0|A": 7,
+   "M02|N0|B": 11,
+   "M02|X|A": 96,
+   "M02|X|B": 39,
+   "M02|Y|A": 53,
+   "M02|Y|B": 23,
+   "M02|Z|A": 14,
+   "M02|Z|B": 5
+  }
+ }
+}
