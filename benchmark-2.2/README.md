@@ -2,7 +2,7 @@
 
 两个合成人物、各半年（2026-09-01 至 2027-02-27）的聊天历史，三个榜：**短对话榜**（M01 宋雨橙，话痨短句型）、**长对话榜**（M02 孟远舟，长信型）、**自然用记忆榜**（该提旧事时提，不该提时不翻旧账，提的方式像人）。成绩和成本一起排名。
 
-> **状态：挑战赛 2026-11-12 开始（北京时间）。** 调试期 11-12 至 12-02，**12-03 00:00 冻结**，封存跑 12-03 至 12-09，目标 12-12 公布。规则见 [RULES.md](RULES.md)，计分见 [SCORING.md](SCORING.md)；报名 / 申请试跑 / 提交冻结版本：[开 issue](https://github.com/Ornn8/chat-memory-benchmark/issues/new?template=challenge-entry.yml)。
+> **状态：挑战赛 2026-11-12 开始（北京时间）。** 调试期 11-12 至 12-02，**12-03 00:00 冻结**，封存跑 12-03 至 12-09，目标 12-12 公布。规则见 [RULES.md](RULES.md)，计分见 [SCORING.md](SCORING.md)；报名 / 申请试跑 / 提交冻结版本：[开 issue](https://github.com/Ornn8/chat-memory-benchmark/issues/new?template=challenge-entry.yml)。报名后加 QQ 群 1132194746 交押金、联系我们。
 
 ## 先读这四条
 
