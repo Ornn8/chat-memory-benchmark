@@ -1,0 +1,36 @@
+{
+  "answers_file": "outputs/answers-714-aligned-on.jsonl",
+  "answers_sha256": "b19ab7951c4aa9bcb6be507cf6f9ae85f23858e908c815775bc14b1444b69555",
+  "dataset": "natural-timegrid-20261101-v2",
+  "dataset_manifest_sha256": "19b7edf73bde64067a59132f6a58b1756863a880026c1487ee8a4766a377938f",
+  "questions": 714,
+  "config": {
+    "ingest": "capture(raw, skip write-gate), one memory per history turn, logical-time stamped",
+    "memory_max_chars": 0,
+    "top_k": 10,
+    "finalize_topic": true,
+    "embed_model": "embeddinggemma-2",
+    "embed_endpoint": "http://127.0.0.1:8091/v1",
+    "qa_model": "deepseek-chat",
+    "qa_base_url": "https://api.deepseek.com",
+    "short_window_turns": 0,
+    "rerank_model": "temsa/mmarco-mMiniLMv2-L12-H384-v1-onnx-cpu-qint8",
+    "memory_isolation": "per-persona isolated DB",
+    "exam_isolation": "questions/answers not written back"
+  },
+  "usage": {
+    "qa": {
+      "calls": 714,
+      "prompt_tokens": 1195712,
+      "completion_tokens": 35492,
+      "total_tokens": 1231204
+    },
+    "finalize": {
+      "calls": 416,
+      "prompt_tokens": 191364,
+      "completion_tokens": 12663,
+      "total_tokens": 204027
+    }
+  },
+  "trace_file": "outputs/trace-714-aligned-on.jsonl"
+}
