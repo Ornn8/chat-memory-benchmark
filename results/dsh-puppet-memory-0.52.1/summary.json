@@ -1,0 +1,165 @@
+{
+  "project": "dsh-puppet-memory",
+  "version": "0.52.1",
+  "repo": "https://github.com/xingyueDanYang/dsh-puppet-memory",
+  "dataset": "natural-timegrid-20261101-v2",
+  "dataset_manifest_sha256": "846b3197102c64e446fba6d73437c814359b8c36e6aa393fb1df5019b1de2cb3",
+  "total": 714,
+  "pass": 633,
+  "rate": 0.8865546218487395,
+  "judge": "deepseek-flash (DeepSeek-V4.1-Flash), temperature 0, thinking disabled; prompt = grading/judge-prompt.md",
+  "by_persona": {
+    "P01": {
+      "total": 88,
+      "pass": 81
+    },
+    "P12": {
+      "total": 79,
+      "pass": 73
+    },
+    "P14": {
+      "total": 82,
+      "pass": 77
+    },
+    "P16": {
+      "total": 123,
+      "pass": 106
+    },
+    "P17": {
+      "total": 172,
+      "pass": 145
+    },
+    "P20": {
+      "total": 170,
+      "pass": 151
+    }
+  },
+  "by_tag": {
+    "用户的基本信息": {
+      "total": 56,
+      "pass": 43
+    },
+    "约定和欠账": {
+      "total": 55,
+      "pass": 47
+    },
+    "第三方事实": {
+      "total": 114,
+      "pass": 102
+    },
+    "偏好": {
+      "total": 66,
+      "pass": 55
+    },
+    "分散的线索": {
+      "total": 56,
+      "pass": 46
+    },
+    "资料不足": {
+      "total": 56,
+      "pass": 53
+    },
+    "生日": {
+      "total": 40,
+      "pass": 40
+    },
+    "时间约定": {
+      "total": 43,
+      "pass": 42
+    },
+    "边界": {
+      "total": 68,
+      "pass": 57
+    },
+    "敏感的事": {
+      "total": 40,
+      "pass": 31
+    },
+    "纠错": {
+      "total": 48,
+      "pass": 44
+    },
+    "改口": {
+      "total": 40,
+      "pass": 37
+    },
+    "带条件或期限的偏好和边界": {
+      "total": 59,
+      "pass": 51
+    },
+    "共同编的故事": {
+      "total": 43,
+      "pass": 39
+    },
+    "没说完要跟进的事": {
+      "total": 42,
+      "pass": 38
+    },
+    "计划": {
+      "total": 65,
+      "pass": 57
+    },
+    "计划假设梦转述猜测": {
+      "total": 65,
+      "pass": 62
+    },
+    "转述": {
+      "total": 44,
+      "pass": 44
+    },
+    "相对日期": {
+      "total": 44,
+      "pass": 37
+    },
+    "时间题": {
+      "total": 48,
+      "pass": 39
+    },
+    "相似事件": {
+      "total": 40,
+      "pass": 38
+    },
+    "称呼条件": {
+      "total": 48,
+      "pass": 47
+    },
+    "职业": {
+      "total": 51,
+      "pass": 42
+    },
+    "没解释的矛盾": {
+      "total": 47,
+      "pass": 39
+    },
+    "假设": {
+      "total": 49,
+      "pass": 49
+    },
+    "助手自己说过的话": {
+      "total": 58,
+      "pass": 55
+    },
+    "真实变化": {
+      "total": 58,
+      "pass": 49
+    }
+  },
+  "by_interval": {
+    "0": {
+      "total": 189,
+      "pass": 178
+    },
+    "3": {
+      "total": 184,
+      "pass": 157
+    },
+    "15": {
+      "total": 174,
+      "pass": 154
+    },
+    "45": {
+      "total": 167,
+      "pass": 144
+    }
+  }
+}
